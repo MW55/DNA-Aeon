@@ -1,4 +1,8 @@
-![DNA-Aeon](readme_images/dna_aeon_logo.png)
+
+<p align="center">
+  <img src="readme_images/dna_aeon_logo.png" alt="DNA-Aeon" width="350"/>
+</p>
+
 DNA-Aeon is a codec for the storage of digital data into constraint adhering DNA sequences with the ability to detect and correct insertions, deletions, substitutions and loss of fragments.
 The inner encoder uses the concept of arithmetic coding to generate constraint-adhering DNA sequences, with periodical inserted CRCs functioning as marker symbols.
 These marker symbols are used by the inner decoder, which is a variant of the stack algorithm, to stay in sync and allowing the correction of insertions, deletions and substitutions.
