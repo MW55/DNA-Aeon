@@ -1,0 +1,20 @@
+diff --git a/norec4dna/Encoder.py b/norec4dna/Encoder.py
+index d33d8d3..ae706b9 100644
+--- a/norec4dna/Encoder.py
++++ b/norec4dna/Encoder.py
+@@ -35,6 +35,7 @@ class Encoder:
+ 
+     @staticmethod
+     def create_progress_bar(max_value):
++        return None
+         widgets = [progressbar.Percentage(), progressbar.Bar(), ' Encoded: ', progressbar.Counter(), ', ',
+                    progressbar.Variable('Dropped'), ', ', progressbar.AdaptiveETA(), ' ', progressbar.Timer()]
+         return progressbar.ProgressBar(max_value=max_value, widgets=widgets, max_error=False,
+@@ -59,6 +60,7 @@ class Encoder:
+         print("number_of_chunks from chunk_size:" + str(self.number_of_chunks))
+ 
+     def update_progress_bar(self):
++        return None
+         self.progress_bar.update(len(self.get_encoded_packets()), Dropped=self.ruleDrop)
+ 
+     @staticmethod

@@ -1,0 +1,5 @@
+- homopolymer 3 (no homopolymers longer than 2 are allowed)
+- gc content 40-60
+- all motifs in MESA
+
+the mesa config is in the json file in this folder.

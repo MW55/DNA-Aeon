@@ -1,0 +1,607 @@
+{
+  "sequence": "",
+  "key": "TESTlKG-b6GTESTT7cgGTESTw_MRTESTj_e44wnTEST",
+  "enabledUndesiredSeqs": [
+    {
+      "sequence": "TATAAA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Eukaryotic promotor recognition motif httpsdoiorg10101600222836(90)902239"
+    },
+    {
+      "sequence": "TTGACA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Prokaryotic promoter recognition motif httpsdoiorg101016jjmb201101018"
+    },
+    {
+      "sequence": "TGTATAATG",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Prokaryotic promoter recognition motif httpsdoiorg101016jjmb201101018"
+    },
+    {
+      "sequence": "GCCACCATGG",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Eukaryotic ribosomal binding site httpsdoiorg10101600222836(87)904189"
+    },
+    {
+      "sequence": "ACCACCATGG",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Eukaryotic ribosomal binding site httpsdoiorg10101600222836(87)904189"
+    },
+    {
+      "sequence": "AATAAA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Eukaryotic polyadenylation signal httpsdoiorg10101600928674(87)902923"
+    },
+    {
+      "sequence": "TTGTGTGTTG",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Eukaryotic polyadenylation signal httpsdoiorg10101600928674(87)902923"
+    },
+    {
+      "sequence": "ATAACTTCGTATAGCATACATTATACGAACGGTA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "loxR httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "TACCGTTCGTATAGCATACATTATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "loxL httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "TACCGTTCGTATAGCATACATTATACGAACGGTA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "loxLR httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "TACCGTTCGTATATGGTATTATATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "lox1R httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "TACCGTTCGTATATTCTATCTTATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "lox2R httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "TACCGTTCGTATAGGATACTTTATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "lox3R httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "TACCGTTCGTATATACTATACTATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "lox4R httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "TACCGTTCGTATACTATAGCCTATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "lox5R httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "ATAACTTCGTATATGGTATTATATACGAACGGTA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox1L httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "ATAACTTCGTATAGTATACCTTATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "loxN httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "ATAACTTCGTATAGTATACATTATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "loxP 511 httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "ATAACTTCGTATAGTACACATTATACGAAGTTAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "lox 5171 httpsdoiorg101016jjbiotec201606033"
+    },
+    {
+      "sequence": "GCATACAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer loxP WT"
+    },
+    {
+      "sequence": "TGGTATTA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox1 httpsdoiorg10118614712164773"
+    },
+    {
+      "sequence": "TTCTATCT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox2 httpsdoiorg10118614712164773"
+    },
+    {
+      "sequence": "GGATACTT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox3 httpsdoiorg10118614712164773"
+    },
+    {
+      "sequence": "TACTATAC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox4 httpsdoiorg10118614712164773"
+    },
+    {
+      "sequence": "CTATAGCC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox5 httpsdoiorg10118614712164773"
+    },
+    {
+      "sequence": "AGGTATGC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox6 httpsdoiorg101007978981103874733"
+    },
+    {
+      "sequence": "TTGTATGG",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox7 httpsdoiorg101007978981103874733"
+    },
+    {
+      "sequence": "GGATAGTA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox8 httpsdoiorg101007978981103874733"
+    },
+    {
+      "sequence": "GTGTATTT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox9 httpsdoiorg101007978981103874733"
+    },
+    {
+      "sequence": "GGTTACGG",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox10 httpsdoiorg101007978981103874733"
+    },
+    {
+      "sequence": "TTTTAGGT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer lox11 httpsdoiorg101007978981103874733"
+    },
+    {
+      "sequence": "GTATACCT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer loxN httpsdoiorg101038nature06293"
+    },
+    {
+      "sequence": "GTACACAT",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Lox site spacer loxP 5171 httpsdoiorg101007978981103874733"
+    },
+    {
+      "sequence": "GAAGAC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "BbsI"
+    },
+    {
+      "sequence": "GGTCTC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "BsaI"
+    },
+    {
+      "sequence": "CGTCTC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "BsmBI"
+    },
+    {
+      "sequence": "GCTCTTC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "BspQI"
+    },
+    {
+      "sequence": "GCGATG",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "BtgZI"
+    },
+    {
+      "sequence": "CGTCTC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Esp3I"
+    },
+    {
+      "sequence": "GCTCTTC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "SapI"
+    },
+    {
+      "sequence": "CTCGTAGACTGCGTACCA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Adapter F httpsdoiorg10118617464811832"
+    },
+    {
+      "sequence": "GACGATGAGTCCTGAGTA",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "Adapter R httpsdoiorg10118617464811832"
+    },
+    {
+      "sequence": "GGTTCCACGTAAGCTTCC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "H1 (HindIII) httpsdoiorg101016jjbiotec200308005"
+    },
+    {
+      "sequence": "GCGATTACCCTGTACACC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "B4 (BsrGI) httpsdoiorg101016jjbiotec200308005"
+    },
+    {
+      "sequence": "GCCAGTACATCAATTGCC",
+      "error_prob": "100.0",
+      "enabled": true,
+      "description": "M3 (MfeI) httpsdoiorg101016jjbiotec200308005"
+    }
+  ],
+  "kmer_windowsize": "50",
+  "gc_windowsize": "50",
+  "gc_name": "Default Graph",
+  "gc_error_prob": {
+    "data": [
+      {
+        "x": 0,
+        "y": 100
+      },
+      {
+        "x": 30,
+        "y": 9.73
+      },
+      {
+        "x": 40,
+        "y": 0
+      },
+      {
+        "x": 60.17,
+        "y": 0
+      },
+      {
+        "x": 70,
+        "y": 9.88
+      },
+      {
+        "x": 100,
+        "y": 100
+      }
+    ],
+    "interpolation": true,
+    "maxX": 100,
+    "maxY": 100,
+    "xRound": 2,
+    "yRound": 2,
+    "label": "Error Probability",
+    "xLabel": "GC-Percentage"
+  },
+  "homopolymer_error_prob": {
+    "data": [
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 2,
+        "y": 0
+      },
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 5,
+        "y": 0
+      },
+      {
+        "x": 6,
+        "y": 0
+      },
+      {
+        "x": 7,
+        "y": 0
+      },
+      {
+        "x": 15,
+        "y": 76.01
+      },
+      {
+        "x": 20,
+        "y": 100
+      }
+    ],
+    "interpolation": true,
+    "maxX": 20,
+    "maxY": 100,
+    "xRound": 0,
+    "yRound": 2,
+    "label": "Error Probability",
+    "xLabel": "Homopolymer length"
+  },
+  "homopolymer_name": "Default Graph",
+  "kmer_error_prob": {
+    "data": [
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 6,
+        "y": 0.15
+      },
+      {
+        "x": 12,
+        "y": 0
+      },
+      {
+        "x": 22,
+        "y": 1.29
+      },
+      {
+        "x": 40,
+        "y": 5.29
+      },
+      {
+        "x": 60,
+        "y": 17.73
+      },
+      {
+        "x": 79,
+        "y": 42.61
+      },
+      {
+        "x": 100,
+        "y": 100
+      }
+    ],
+    "interpolation": true,
+    "maxX": 20,
+    "maxY": 100,
+    "xRound": 0,
+    "yRound": 2,
+    "label": "Error Probability",
+    "xLabel": "Kmer repeats"
+  },
+  "kmer_name": "Default Graph",
+  "err_simulation_order": {
+    "Sequencing": [
+      {
+        "name": "Paired End",
+        "id": "36",
+        "cycles": 1,
+        "conf": {
+          "err_data": {
+            "deletion": 0.0018,
+            "insertion": 0.0011,
+            "mismatch": 0.79,
+            "raw_rate": 0.0032
+          },
+          "err_attributes": {
+            "deletion": {
+              "pattern": {
+                "A": 0.25,
+                "C": 0.25,
+                "G": 0.25,
+                "T": 0.25
+              },
+              "position": {
+                "random": 1
+              }
+            },
+            "insertion": {
+              "pattern": {
+                "A": 0.25,
+                "C": 0.25,
+                "G": 0.25,
+                "T": 0.25
+              },
+              "position": {
+                "random": 1
+              }
+            },
+            "mismatch": {
+              "pattern": {
+                "A": {
+                  "C": 0.25,
+                  "G": 0.5,
+                  "T": 0.25
+                },
+                "C": {
+                  "A": 0.25,
+                  "G": 0.5,
+                  "T": 0.25
+                },
+                "G": {
+                  "A": 0.25,
+                  "C": 0.25,
+                  "T": 0.5
+                },
+                "T": {
+                  "A": 0.25,
+                  "C": 0.25,
+                  "G": 0.5
+                }
+              }
+            }
+          },
+          "type": "sequencing"
+        }
+      }
+    ],
+    "Synthesis": [
+      {
+        "name": "None",
+        "id": "71",
+        "cycles": 1,
+        "conf": {
+          "err_data": {
+            "deletion": 0.3,
+            "insertion": 0.3,
+            "mismatch": 0.3,
+            "raw_rate": 0
+          },
+          "err_attributes": {
+            "deletion": {
+              "pattern": {
+                "A": 0.4,
+                "C": 0.2,
+                "G": 0.2,
+                "T": 0.2
+              },
+              "position": {
+                "homopolymer": 0,
+                "random": 1
+              }
+            },
+            "insertion": {
+              "pattern": {
+                "A": 0.25,
+                "C": 0.25,
+                "G": 0.25,
+                "T": 0.25
+              },
+              "position": {
+                "homopolymer": 0,
+                "random": 1
+              }
+            },
+            "mismatch": {}
+          },
+          "type": "synthesis"
+        }
+      }
+    ],
+    "Storage/PCR": [
+      {
+        "name": "None",
+        "id": "8",
+        "cycles": "24",
+        "conf": {
+          "err_data": {
+            "deletion": 0.3333,
+            "insertion": 0.3333,
+            "mismatch": 0.33340000000000003,
+            "raw_rate": 0
+          },
+          "err_attributes": {
+            "deletion": {
+              "pattern": {
+                "A": 0.25,
+                "C": 0.25,
+                "G": 0.25,
+                "T": 0.25
+              },
+              "position": {
+                "homopolymer": 0.5,
+                "random": 0.5
+              }
+            },
+            "insertion": {
+              "pattern": {
+                "A": 0.25,
+                "C": 0.25,
+                "G": 0.25,
+                "T": 0.25
+              },
+              "position": {
+                "homopolymer": 0.5,
+                "random": 0.5
+              }
+            },
+            "mismatch": {
+              "pattern": {}
+            }
+          },
+          "type": "storage"
+        }
+      },
+      {
+        "name": "None",
+        "id": "7",
+        "cycles": "30",
+        "conf": {
+          "err_data": {
+            "deletion": 0.3333,
+            "insertion": 0.3333,
+            "mismatch": 0.33340000000000003,
+            "raw_rate": 0
+          },
+          "err_attributes": {
+            "deletion": {
+              "pattern": {
+                "A": 0.25,
+                "C": 0.25,
+                "G": 0.25,
+                "T": 0.25
+              },
+              "position": {
+                "homopolymer": 0.5,
+                "random": 0.5
+              }
+            },
+            "insertion": {
+              "pattern": {
+                "A": 0.25,
+                "C": 0.25,
+                "G": 0.25,
+                "T": 0.25
+              },
+              "position": {
+                "homopolymer": 0.5,
+                "random": 0.5
+              }
+            },
+            "mismatch": {
+              "pattern": {}
+            }
+          },
+          "type": "pcr"
+        }
+      }
+    ]
+  },
+  "use_error_probs": false,
+  "acgt_only": true,
+  "random_seed": "",
+  "do_max_expect": false,
+  "temperature": "310.15",
+  "send_mail": false,
+  "email": "",
+  "asHTML": true
+}

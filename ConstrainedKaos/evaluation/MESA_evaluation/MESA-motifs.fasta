@@ -1,0 +1,116 @@
+>Eukaryotic promotor recognition motif 
+TATAAA
+>Prokaryotic promoter recognition motif 
+TTGACA
+>Prokaryotic promoter recognition motif 
+TGTATAATG
+>Eukaryotic ribosomal binding site 
+GCCACCATGG
+>Eukaryotic ribosomal binding site 
+ACCACCATGG
+>Eukaryotic polyadenylation signal 
+AATAAA
+>Eukaryotic polyadenylation signal 
+TTGTGTGTTG
+>loxP 
+ATAACTTCGTATAGCATACATTATACGAAGTTAT
+>loxR 
+ATAACTTCGTATAGCATACATTATACGAACGGTA
+>loxL 
+TACCGTTCGTATAGCATACATTATACGAAGTTAT
+>loxLR 
+TACCGTTCGTATAGCATACATTATACGAACGGTA
+>lox1R 
+TACCGTTCGTATATGGTATTATATACGAAGTTAT
+>lox2R 
+TACCGTTCGTATATTCTATCTTATACGAAGTTAT
+>lox3R 
+TACCGTTCGTATAGGATACTTTATACGAAGTTAT
+>lox4R 
+TACCGTTCGTATATACTATACTATACGAAGTTAT
+>lox5R 
+TACCGTTCGTATACTATAGCCTATACGAAGTTAT
+>Lox1L 
+ATAACTTCGTATATGGTATTATATACGAACGGTA
+>loxN 
+ATAACTTCGTATAGTATACCTTATACGAAGTTAT
+>loxP 511 
+ATAACTTCGTATAGTATACATTATACGAAGTTAT
+>lox 5171 
+ATAACTTCGTATAGTACACATTATACGAAGTTAT
+>Lox site spacer loxP WT 
+GCATACAT
+>Lox site spacer lox1 
+TGGTATTA
+>Lox site spacer lox2 
+TTCTATCT
+>Lox site spacer lox3 
+GGATACTT
+>Lox site spacer lox4 
+TACTATAC
+>Lox site spacer lox5 
+CTATAGCC
+>Lox site spacer lox6 
+AGGTATGC
+>Lox site spacer lox7 
+TTGTATGG
+>Lox site spacer lox8 
+GGATAGTA
+>Lox site spacer lox9 
+GTGTATTT
+>Lox site spacer lox10 
+GGTTACGG
+>Lox site spacer lox11 
+TTTTAGGT
+>Lox site spacer loxN 
+GTATACCT
+>Lox site spacer loxP 5171 
+GTACACAT
+>BbsI
+GAAGAC
+>BsaI
+GGTCTC
+>BsmBI
+CGTCTC
+>BspQI
+GCTCTTC
+>BtgZI
+GCGATG
+>Esp3I
+CGTCTC
+>SapI
+GCTCTTC
+>Adapter F 
+CTCGTAGACTGCGTACCA
+>Adapter R 
+GACGATGAGTCCTGAGTA
+>H1 (HindIII) 
+GGTTCCACGTAAGCTTCC
+>B4 (BsrGI) 
+GCGATTACCCTGTACACC
+>M3 (MfeI) 
+GCCAGTACATCAATTGCC
+>reversed - Eukaryotic promotor recognition motif 
+AAATAT
+>reversed - Prokaryotic promoter recognition motif 
+ACAGTT
+>reversed - Prokaryotic promoter recognition motif 
+GTAATATGT
+>reversed - Eukaryotic ribosomal binding site 
+GGTACCACCG
+>reversed - Eukaryotic ribosomal binding site 
+GGTACCACCA
+>reversed - Eukaryotic polyadenylation signal 
+AAATAA
+>reversed -Eukaryotic polyadenylation signal 
+GTTGTGTGTT
+>reversed - loxP 
+TATTGAAGCATATTACATACGATATGCTTCAATA
+>reversed - loxR 
+ATGGCAAGCATATTACATACGATATGCTTCAATA
+>reversed - loxL 
+TATTGAAGCATATTACATACGATATGCTTGCCAT
+>reversed - loxLR 
+ATGGCAAGCATATTACATACGATATGCTTGCCAT
+>reversed - lox1R 
+TATTGAAGCATATATTATGGTATATGCTTGCCAT

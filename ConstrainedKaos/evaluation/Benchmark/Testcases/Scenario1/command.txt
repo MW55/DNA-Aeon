@@ -1,0 +1,1 @@
+-length 10 -hp 4 -output -output path\to\save\codebook.fasta -input path\for\input.fasta -gcStart 0.4 -gcEnd 0.6 -plot 1 -lex true

@@ -1,0 +1,12 @@
+[submodule "Zippy"]
+	path = Zippy
+	url = https://github.com/troldal/Zippy.git
+[submodule "abseil-cpp"]
+	path = abseil-cpp
+	url = https://github.com/abseil/abseil-cpp.git
+[submodule "ConstrainedKaos"]
+	path = ConstrainedKaos
+	url = https://github.com/HFLoechel/ConstrainedKaos.git
+[submodule "NOREC4DNA"]
+	path = NOREC4DNA
+	url = https://github.com/umr-ds/NOREC4DNA.git

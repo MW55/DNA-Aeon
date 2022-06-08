@@ -1,0 +1,9 @@
+version: '3'
+services:
+  dna_aeon:
+    #build: .
+    image: dna_aeon
+    #image: mw55/DNAAeon:latest
+    volumes:
+      - ./data:/DNA_Aeon/data
+      - ./codewords:/DNA_Aeon/codewords

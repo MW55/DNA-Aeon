@@ -1,0 +1,13 @@
+diff --git a/cdnarules.c b/cdnarules.c
+index 3310f8c..9e62468 100644
+--- a/cdnarules.c
++++ b/cdnarules.c
+@@ -186,7 +186,7 @@ static PyObject* elimination(PyObject *self, PyObject *args)
+         // ( IF the Matrix is singular we might have no "true" in column i. )
+         // but we might be able to retrieve as many blocks as possible
+         if (!*((bool*)PyArray_GETPTR2(A,i,i))) {
+-            PySys_WriteStdout("Could not decode Chunk %u\n", i);
++            //PySys_WriteStdout("Could not decode Chunk %u\n", i);
+             dirty_rows[i] = true;
+             dirty = true;
+             num_dirty_rows++;

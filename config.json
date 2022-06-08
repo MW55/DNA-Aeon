@@ -1,0 +1,56 @@
+{
+  "decode": {
+    "input": "data/encoded.fasta",
+    "NOREC4DNA_config": "data/encoded.ini",
+    "length": 0,
+    "metric": {
+      "fano": {
+        "error_probability": 0.05,
+        "rate": {
+          "high": 5,
+          "low": 4
+        }
+      },
+      "penalties": {
+        "crc": 0.1,
+        "no_hit": 8
+      }
+    },
+    "output": "data/decoded.txt",
+    "queue": {
+      "reduce": 0.5,
+      "runs": 1,
+      "size": 200000
+    },
+    "threshold": {
+      "checkpoint": 3,
+      "finish": 0,
+      "loop": 1
+    }
+  },
+  "encode": {
+    "input": "data/Dorn",
+    "keep_intermediary": false,
+    "min_length": 0,
+    "output": "data/encoded.fasta",
+    "same_length": false,
+    "update_config": true
+  },
+  "general": {
+    "as_fasta": true,
+    "codebook": {
+      "motifs": "./codewords/cw_40_60_hp3.json",
+      "words": "./codewords/cw_40_60_hp3.fasta"
+    },
+    "sync": 4,
+    "threads": 4,
+    "zip": {
+      "decodable_only": true,
+      "most_common_only": true
+    }
+  },
+  "NOREC4DNA": {
+    "chunk_size": 13,
+    "package_redundancy": 0.45
+  }
+}
