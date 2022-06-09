@@ -1,0 +1,21 @@
+#llvmlite==0.38.0 #0.36.0
+numpy==1.20.0 #1.19.0
+scipy==1.8.1
+#numba==0.55.1 
+requests==2.27.1
+#colorama==0.4.4
+#pycallgraph==1.0.1
+#bcolors==1.0.4
+bitarray==2.5.1
+reedsolo==0.3
+Pillow==9.1.1
+#matplotlib==3.5.2
+pycryptodomex==3.14.1
+#pytest==7.1.2
+bitstring==3.1.9
+cycler==0.11.0
+setuptools==62.3.1
+pybloomfiltermmap3==0.5.3 # comment for windows
+#pybloom3==0.0.3 # this is only needed for windows
+pandas==1.4.2
+progressbar2==4.0.0
