@@ -23,14 +23,12 @@ def encode_norec_for_ac(config_data, current_path):
     norec_config = output.split()[-1].decode()
     # print("\n" + NOREC4DNA_BASE_PATH + "/" + filename + ".ini\n")
     # os.rename(config, NOREC4DNA_BASE_PATH + "/" + filename + ".ini")
-    '''''
     with open(norec_config, "r") as c_:
         line_list = c_.readlines()
         line_list[0] = "[{cpath}/data/{fname}_RU10.zip]\n".format(cpath=current_path, fname=filename) #"[../data/" + filename + "_RU10.zip]\n"
         with open("{cpath}/{ini_path}".format(cpath=current_path, ini_path=config_data["decode"]["NOREC4DNA_config"]), "w") as o_:
             o_.writelines(line_list)
     os.remove(norec_config)
-    '''
     return
 
 

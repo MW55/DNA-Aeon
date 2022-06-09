@@ -1128,7 +1128,7 @@ namespace argparse {
         using list_iterator = std::list<Argument>::iterator;
 
         void index_argument(list_iterator argIt) {
-            for (auto &mName : std::as_const(argIt->mNames))
+            for (auto &mName : argIt->mNames) //for (auto &mName : std::as_const(argIt->mNames))
                 mArgumentMap.insert_or_assign(mName, argIt);
         }
 
