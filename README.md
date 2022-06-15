@@ -14,7 +14,7 @@ loss of complete fragments and the successful decoding of the input data even if
 To download DNA-Aeon, clone the repository to a folder of your choice with the **--recurse-submodules** command:
 
 ```shell
-$ git clone https://github.com/MW55/arithmetic_modulator_error_correction --recurse-submodules
+$ git clone https://github.com/MW55/DNA-Aeon --recurse-submodules
 ```
 
 you can then start the installation using the *setup.py* script in the root folder of the cloned repository:
