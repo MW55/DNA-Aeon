@@ -5,10 +5,10 @@
 
 DNA-Aeon is a codec for the storage of digital data into constraint adhering DNA sequences with the ability to detect and correct insertions, deletions, substitutions and loss of fragments.
 The inner encoder uses the concept of arithmetic coding to generate constraint-adhering DNA sequences, with periodical inserted CRCs functioning as marker symbols.
-These marker symbols are used by the inner decoder, which is a variant of the stack algorithm, to stay in sync and allowing the correction of insertions, deletions and substitutions. DNA-Aeon was tested under Linux (Ubuntu 20.04 LTS and Arch Linux).
+These marker symbols are used by the inner decoder, which is a variant of the stack algorithm, to stay in sync and allowing the correction of insertions, deletions and substitutions.
 
 As outer code the raptor-fountain implementation of [NOREC4DNA](https://github.com/umr-ds/NOREC4DNA.git) is used, which can generate an arbitrary amount of redundant packages. This enables DNA-Aeon to account for the 
-loss of complete fragments and the successful decoding of the input data even if the inner decoder should fail.
+loss of complete fragments and the successful decoding of the input data even if the inner decoder should fail. DNA-Aeon was tested under Linux (Ubuntu 20.04 LTS and Arch Linux).
 
 # Installation
 To download DNA-Aeon, clone the repository to a folder of your choice with the **--recurse-submodules** command:
