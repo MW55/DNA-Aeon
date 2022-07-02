@@ -10,6 +10,9 @@ These marker symbols are used by the inner decoder, which is a variant of the st
 As outer code the raptor-fountain implementation of [NOREC4DNA](https://github.com/umr-ds/NOREC4DNA.git) is used, which can generate an arbitrary amount of redundant packages. This enables DNA-Aeon to account for the 
 loss of complete fragments and the successful decoding of the input data even if the inner decoder should fail. DNA-Aeon was tested under Linux (Ubuntu 20.04 LTS and Arch Linux).
 
+# Requirements
+For the installation, pip is required (we recommend 22.1.2 or newer) and g++ (GCC) 12.1.0 or newer. For the optional docker container, docker is required (we recommend 20.10.17 or newer).
+
 # Installation
 To download DNA-Aeon, clone the repository to a folder of your choice with the **--recurse-submodules** command:
 
@@ -23,7 +26,7 @@ you can then start the installation using the *setup.py* script in the root fold
 $ python3 setup.py
 ```
 
-this will create a python virtual environment in the NOREC4DNA folder, install NOREC4DNA and then compile DNA-Aeon.
+this will create a python virtual environment in the NOREC4DNA folder, install NOREC4DNA and then compile DNA-Aeon. The installation should take less than 5 minutes on a typical desktop pc, but can take longer if an older pip version is used.
 
 # Usage
 ## Code Book Generation
@@ -103,6 +106,8 @@ $ python3 encode.py -c config.json
 This will encode the data specified in the *config.json* file first using the NOREC4DNA raptor-fountain implementation, followed by 
 encoding the data using the inner encoder of DNA-Aeon. The parameters of the config file are described in section [Configuration file](#Configuration-file).
 
+If the command is run on a fresh install of DNA-Aeon, the *Dorn* file in the *data/* folder is encoded. This file contains the german fairy tail Dornröschen (sleeping beauty). The encoding should take around 3 seconds, and the resulting file *encoded.fasta* in the *data/* folder should contain 528 DNA strands of 81 bases length each. Each strand has a GC content between 40 % and 60 % and no homopolymers longer than 3.
+
 ## Decoding
 To decode data, the same config file as for encoding is used, together with the wrapper script *decode.py*:
 
@@ -111,6 +116,8 @@ $ python3 decode.py -c config.json
 ```
 
 This will decode the data specified in the config file and will save the decoded data under *data/results/*.
+
+If the command is run on a fresh install of DNA-Aeon (after encoding the example file, as shown above), the *data/results/* should contain the file *Dorn*, a text file containing the fairy tale that was encoded before. The decoding should take around 3 seconds on a typical desktop computer.
 
 
 # Configuration file
@@ -190,3 +197,19 @@ docker run -v /tmp/data:/DNA_Aeon/data:z -v codewords:/DNA_Aeon/codewords:z -it 
 All input files must be inside the /data folder.
 
 All output files will be written to "/data/results".
+
+## Reproducing the in-vitro analysis
+To evaluate DNA-Aeon, we encoded the files *Dorn* *el.jpg* and *mosla.png* that can be found in the *examples/* folder. The encoded files were subsequently sythesized, amplified and sequenced. The json files in the *examples/* folder can be used to reproduce both the encoding and the decoding of the files. 
+For the encoding, copy the config file (*NAME.json*) to the root DNA-Aeon folder and the corresponding source file to the *data/* folder. The encoding command is as follows:
+
+```shell
+$ python3 encode.py -c NAME.json
+```
+
+To reproduce the decoding of the sequenced data, it first has to be downloaded from the sequence read archive. The BioProject ID is PRJNA855029, and the corresponding SRA IDs are SRR19954697, SRR19954696, 	SRR19954694,SRR19954695, and SRR19954693. For the preprocessing of the raw data, we recommend using the pipline [Natrix](https://github.com/MW55/Natrix.git) up until the dereplication step (CD-HIT). The dereplicated data can then be used for decoding, using the corresponding json file found in the *examples/* folder:
+
+```shell
+$ python3 decode.py -c NAME.json
+```
+
+Keep in mind that the filename in the json file has to be adjusted before decoding.

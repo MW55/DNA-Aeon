@@ -31,7 +31,7 @@
   "encode": {
     "input": "data/Dorn",
     "keep_intermediary": false,
-    "min_length": 0,
+    "min_length": 81,
     "output": "data/encoded.fasta",
     "same_length": false,
     "update_config": true
@@ -51,6 +51,6 @@
   },
   "NOREC4DNA": {
     "chunk_size": 13,
-    "package_redundancy": 0.45
+    "package_redundancy": 0.4
   }
 }

@@ -1,0 +1,56 @@
+{
+  "decode": {
+    "input": "data/Dorn247_A_fin.fasta",
+    "NOREC4DNA_config": "data/Dorn3_Thu_Feb_24_10_09_28_2022.ini",
+    "length": 156,
+    "metric": {
+      "fano": {
+        "error_probability": 0.05,
+        "rate": {
+          "high": 4,
+          "low": 3
+        }
+      },
+      "penalties": {
+        "crc": 0.1,
+        "no_hit": 8
+      }
+    },
+    "output": "data/decoded.txt",
+    "queue": {
+      "reduce": 0.5,
+      "runs": 0,
+      "size": 200000
+    },
+    "threshold": {
+      "checkpoint": 3,
+      "finish": 0,
+      "loop": 1
+    }
+  },
+  "encode": {
+    "input": "data/Dorn",
+    "keep_intermediary": false,
+    "min_length": 156,
+    "output": "data/encoded.fasta",
+    "same_length": true,
+    "update_config": true
+  },
+  "general": {
+    "as_fasta": true,
+    "codebook": {
+      "motifs": "./codewords/in_vitro_test.json",
+      "words": "./codewords/in_vitro_test.fasta"
+    },
+    "sync": 3,
+    "threads": 2,
+    "zip": {
+      "decodable_only": true,
+      "most_common_only": true
+    }
+  },
+  "NOREC4DNA": {
+    "chunk_size": 25,
+    "package_redundancy": 0.4
+  }
+}
