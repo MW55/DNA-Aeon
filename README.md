@@ -180,13 +180,13 @@ docker build . --tag dna_aeon
 # a public image we be soon under the mosla/dna_aeon:latest tag
 
 # encoding:
-docker run -v /tmp/data:/DNA_Aeon/data:z -v /tmp/codewords:/DNA_Aeon/codewords:z -it dna_aeon python3 encode.py --config data/config_test.json
+docker run -v /tmp/data:/DNA_Aeon/data:z -v codewords:/DNA_Aeon/codewords:z -it dna_aeon python3 encode.py --config config.json
 
 # decoding:
-docker run -v /tmp/data:/DNA_Aeon/data:z -v /tmp/codewords:/DNA_Aeon/codewords:z -it dna_aeon python3 decode.py --config data/config_test.json
+docker run -v /tmp/data:/DNA_Aeon/data:z -v codewords:/DNA_Aeon/codewords:z -it dna_aeon python3 decode.py --config config.json
 
 ```
-###!! while "/tmp/data" will most likely work, make sure to set the correct paths for your volume mappings !!
+###!! while "/tmp/data" will most likely work, make sure to set the correct paths for your volume mappings and make sure that the folders are read/writeable.
 All input files must be inside the /data folder.
 
 All output files will be written to "/data/results".

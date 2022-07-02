@@ -17,7 +17,7 @@ RUN cmake . && make
 # setup NOREC4DNA + dependencies
 WORKDIR /DNA_Aeon/NOREC4DNA
 RUN find /DNA_Aeon/NOREC4DNA -name '*.pyc' -delete
-RUN rm -rf /DNA_Aeon/NOREC4DNA/venv && python -m venv venv && . /DNA_Aeon/NOREC4DNA/venv/bin/activate && pip install wheel && pip install -r requirements.txt && python setup.py install
+RUN rm -rf /DNA_Aeon/NOREC4DNA/venv && python -m venv venv && . /DNA_Aeon/NOREC4DNA/venv/bin/activate && pip install wheel && pip install -r ../NOREC_requirements.txt && python setup.py install
 WORKDIR /DNA_Aeon
 
 RUN apt-get purge -y --auto-remove build-essential \
