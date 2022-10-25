@@ -11,7 +11,7 @@ Insertions:   0.0039
 
 I.e. configs with a 2.0 as prefix were evaluated with a total error rate of:
 
-2.0\*0.238 + 2.0\*0.0082 + 2\*0.0039 = 0.0718
+2.0\*0.238 + 2.0\*0.0082 + 2.0\*0.0039 = 0.0718
 
 IMPORTANT: The evaluations were carried out on a powerful computer (500 cores, 2 TB Ram). If you want to use the 
 config files, you will probably have to adjust the *threads* parameter (and maybe the *size*) parameter. The threads parameter
