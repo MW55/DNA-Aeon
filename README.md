@@ -202,6 +202,9 @@ All input files must be inside the /data folder.
 
 All output files will be written to "/data/results".
 
+## Using the error simulation script
+To simulate errors, the paths at the top of the *error_simulation.py* script have to be adjusted. in the main part of the script, the amount of errors and the amount of repetitions can also be adjusted. Please keep in mind, that the resulting file can be found under data/mut_encoded.fasta. In the config file, the input for the decoding has to be adjusted accordingly to run encode-mutate-decode cycles.
+
 ## Reproducing the in-vitro analysis
 To evaluate DNA-Aeon, we encoded the files *Dorn* *el.jpg* and *mosla.png* that can be found in the *examples/* folder. The encoded files were subsequently sythesized, amplified and sequenced. The json files in the *examples/* folder can be used to reproduce both the encoding and the decoding of the files. 
 For the encoding, copy the config file (*NAME.json*) to the root DNA-Aeon folder and the corresponding source file to the *data/* folder. The encoding command is as follows:
