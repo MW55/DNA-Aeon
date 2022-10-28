@@ -29,7 +29,7 @@
     }
   },
   "encode": {
-    "input": "data/Dorn",
+    "input": "data/D",
     "keep_intermediary": false,
     "min_length": 0,
     "output": "data/encoded.fasta",

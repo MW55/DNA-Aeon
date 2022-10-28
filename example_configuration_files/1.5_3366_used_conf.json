@@ -29,7 +29,7 @@
     }
   },
   "encode": {
-    "input": "data/Dorn",
+    "input": "data/D",
     "keep_intermediary": true,
     "min_length": 0,
     "output": "data/encoded.fasta",
@@ -51,7 +51,7 @@
   },
   "NOREC4DNA": {
     "chunk_size": 19,
-    "package_redundancy": 0.47,
+    "package_redundancy": 0.465,
     "insert_header":true,
     "header_crc_length": 8,
     "error_detection": "crc"

@@ -6,9 +6,9 @@ import os
 
 
 def header_crc_mapper(header_crc_conf_entry, header_bool):
-    if not header_bool and header_crc_conf_entry:
-        raise ValueError("Header is turned off but header crc length is not 0. Please adjust.")
-        exit(1)
+    #if not header_bool and header_crc_conf_entry:
+    #    raise ValueError("Header is turned off but header crc length is not 0. Please adjust.")
+    #    exit(1)
     crc_choices = {0: None, 8:"B", 16:"H", 32:"I"}
     try:
         return crc_choices[header_crc_conf_entry]
@@ -39,6 +39,8 @@ def encode_norec_for_ac(config_data, current_path):
     with open(norec_config, "r") as c_:
         line_list = c_.readlines()
         line_list[0] = "[{cpath}/data/{fname}_RU10.zip]\n".format(cpath=current_path, fname=filename) #"[../data/" + filename + "_RU10.zip]\n"
+        if config_data["NOREC4DNA"]["header_crc_length"] == 0:
+            del(line_list[-6])
         with open("{cpath}/{ini_path}".format(cpath=current_path, ini_path=config_data["decode"]["NOREC4DNA_config"]), "w") as o_:
             o_.writelines(line_list)
     os.remove(norec_config)

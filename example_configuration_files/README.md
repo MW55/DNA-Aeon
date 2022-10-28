@@ -16,3 +16,9 @@ I.e. configs with a 2.0 as prefix were evaluated with a total error rate of:
 IMPORTANT: The evaluations were carried out on a powerful computer (500 cores, 2 TB Ram). If you want to use the 
 config files, you will probably have to adjust the *threads* parameter (and maybe the *size*) parameter. The threads parameter
 has to be adjusted for both your available CPU threads and for your available memory.
+
+To generate a codebook that contains the hedges constraint set, the ConstrainedKaos wrapper can be used with the following command:
+
+```shell
+$ python3 generate_codebook.py --GClow 0.33 --GChigh 0.66 --homopolymer 5 --Length 12 --Output hedges_codebook.fasta
+```

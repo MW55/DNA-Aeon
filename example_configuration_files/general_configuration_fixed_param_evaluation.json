@@ -51,6 +51,9 @@
   },
   "NOREC4DNA": {
     "chunk_size": 11,
-    "package_redundancy": 0.56
+    "package_redundancy": 0.56,
+    "insert_header":true,
+    "header_crc_length": 8,
+    "error_detection": "crc"
   }
 }

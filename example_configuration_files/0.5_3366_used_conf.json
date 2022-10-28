@@ -29,7 +29,7 @@
     }
   },
   "encode": {
-    "input": "data/Dorn",
+    "input": "data/D",
     "keep_intermediary": true,
     "min_length": 0,
     "output": "data/encoded.fasta",
@@ -43,7 +43,7 @@
       "words": "./codewords/hedges_codebook.fasta"
     },
     "sync": 2,
-    "threads": 15,
+    "threads": 40,
     "zip": {
       "decodable_only": true,
       "most_common_only": true

@@ -19,8 +19,8 @@
     "output": "decoded.txt",
     "queue": {
       "reduce": 0.5,
-      "runs": 15,
-      "size": 250000
+      "runs": 21,
+      "size": 370000
     },
     "threshold": {
       "checkpoint": 4,
@@ -29,7 +29,7 @@
     }
   },
   "encode": {
-    "input": "data/Dorn",
+    "input": "data/D",
     "keep_intermediary": true,
     "min_length": 0,
     "output": "data/encoded.fasta",
@@ -51,7 +51,7 @@
   },
   "NOREC4DNA": {
     "chunk_size": 18,
-    "package_redundancy": 0.06,
+    "package_redundancy": 0.057,
     "insert_header":true,
     "header_crc_length": 8,
     "error_detection": "crc"
