@@ -5,6 +5,16 @@ import json
 import os
 
 
+def header_crc_mapper(header_crc_conf_entry, header_bool):
+    #if not header_bool and header_crc_conf_entry:
+    #    raise ValueError("Header is turned off but header crc length is not 0. Please adjust.")
+    #    exit(1)
+    crc_choices = {0: None, 8:"B", 16:"H", 32:"I"}
+    try:
+        return crc_choices[header_crc_conf_entry]
+    except KeyError:
+        raise ValueError("Allowed choices for the header crc length are 0 bits, 8 bits, 16 bits or 32 bits. Aborting")
+        exit(1)
 
 def encode_norec_for_ac(config_data, current_path):
     """
@@ -15,9 +25,12 @@ def encode_norec_for_ac(config_data, current_path):
     input_file = config_data["encode"]["input"]
     chunk_size = config_data["NOREC4DNA"]["chunk_size"]
     packet_redundancy = config_data["NOREC4DNA"]["package_redundancy"]
+    header = " --insert_header " if config_data["NOREC4DNA"]["insert_header"] else ""
+    error_detection = config_data["NOREC4DNA"]["error_detection"]
+    header_crc_str = "" if not header_crc_mapper(config_data["NOREC4DNA"]["header_crc_length"], config_data["NOREC4DNA"]["insert_header"]) else " --header_crc_str " + header_crc_mapper(config_data["NOREC4DNA"]["header_crc_length"], config_data["NOREC4DNA"]["insert_header"]) + "" 
     filename = input_file.split("/")[-1]
-    py_command = ("{cpath}/NOREC4DNA/venv/bin/python3 {cpath}/NOREC4DNA/demo_raptor_encode.py --chunk_size {chunk_size_str} --error_correction nocode --save_as_zip {file} --insert_header --overhead {redundancy}".format(
-        cpath=current_path, chunk_size_str=str(chunk_size), file=input_file, redundancy=packet_redundancy))
+    py_command = ("{cpath}/NOREC4DNA/venv/bin/python3 {cpath}/NOREC4DNA/demo_raptor_encode.py --chunk_size {chunk_size_str} --error_correction {err_det} --save_as_zip {file}{ins_header}{crc_str} --overhead {redundancy}".format(
+        cpath=current_path, chunk_size_str=str(chunk_size), file=input_file, redundancy=packet_redundancy, ins_header=header, err_det=error_detection, crc_str=header_crc_str))
     process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     norec_config = output.split()[-1].decode()
@@ -26,6 +39,8 @@ def encode_norec_for_ac(config_data, current_path):
     with open(norec_config, "r") as c_:
         line_list = c_.readlines()
         line_list[0] = "[{cpath}/data/{fname}_RU10.zip]\n".format(cpath=current_path, fname=filename) #"[../data/" + filename + "_RU10.zip]\n"
+        if config_data["NOREC4DNA"]["header_crc_length"] == 0:
+            del(line_list[-6])
         with open("{cpath}/{ini_path}".format(cpath=current_path, ini_path=config_data["decode"]["NOREC4DNA_config"]), "w") as o_:
             o_.writelines(line_list)
     os.remove(norec_config)
