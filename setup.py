@@ -9,7 +9,7 @@ def create_norec_env(current_path):
     create(venv_dir, with_pip=True)
 
 def install_norec_packages(current_path):
-    run(["venv/bin/pip", "install", "--upgrade", "pip"], cwd="{cpath}/NOREC4DNA".format(cpath=current_path))
+    run(["venv/bin/pip", "install", "wheel"], cwd="{cpath}/NOREC4DNA".format(cpath=current_path))
     run(["venv/bin/pip", "install", "-r", abspath("./NOREC_requirements.txt")], cwd="{cpath}/NOREC4DNA".format(cpath=current_path)) #"./NOREC_requirements.txt"
 
 def compile_dna_aeon(current_path):
