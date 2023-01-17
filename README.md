@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/501272672.svg)](https://zenodo.org/badge/latestdoi/501272672)
 
 <p align="center">
   <img src="readme_images/dna_aeon_logo.png" alt="DNA-Aeon" width="350"/>
