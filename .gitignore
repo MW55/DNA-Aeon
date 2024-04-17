@@ -169,3 +169,4 @@ data/encoded.ini
 data/results/D
 data/decoded.txt.zip
 Zippy
+.vscode/launch.json

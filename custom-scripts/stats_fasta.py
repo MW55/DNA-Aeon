@@ -1,7 +1,7 @@
 # This function should check fastaFiles properties
 
-# we read char by char to find the header and the sequence
-# we have to accumulate the sequence in array of array
+# in the checks, it should also check the GC content of the sequence(between 40-60%)
+
 def stats_fasta(fasta_file):
     with open(fasta_file, 'r') as file :
         content = file.read()
@@ -19,6 +19,8 @@ def stats_fasta(fasta_file):
     return (headers, sequences)
                                
 def main():
+    total_elements = 0
+    gc_content = 0 
     hd_count = 0
     sq_count = 0    
     length = 0
@@ -32,10 +34,17 @@ def main():
         print(sequence)
         length += len(sequence)
         sq_count += 1
+        for base in sequence:
+            if base == 'G' or base == 'C':
+                gc_content += 1
+            total_elements += 1
+    
+    print(f"GC content: {gc_content/total_elements*100:.2f}% [40-60%]")
     print("length: ", length/sq_count)
     print("headers: ", hd_count)
     print("sequences: ", sq_count)
+    print("total bases: ", total_elements)
     print("done")    
-
+    
 if __name__ == "__main__":
     main()
