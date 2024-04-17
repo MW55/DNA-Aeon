@@ -54,14 +54,14 @@ if __name__ == '__main__':
     11) results: the results of the evaluation
     
     """
-    out_path = "/home/lemageoire/2024/Development/5_WorkProjects/EPFL_Projects/DNA-Aeondata/dorn_encoded_mod.fasta"
-    ac_path = "/home/lemageoire/2024/Development/5_WorkProjects/EPFL_Projects/DNA-Aeon/arithmetic_modulator_error_correction"
-    norec_path = "/home/lemageoire/2024/Development/5_WorkProjects/EPFL_Projects/DNA-Aeon/NOREC4DNA"
+    out_path = "/Users/mguyot/Documents/DNA-Aeon/data/dorn_encoded_mod.fasta"
+    ac_path = "/Users/mguyot/Documents/DNA-Aeon/arithmetic_modulator_error_correction"
+    norec_path = "/Users/mguyot/Documents/DNA-Aeon/NOREC4DNA"
     ini_name = "Dorn.ini"
-    orig_path = "/home/lemageoire/2024/Development/5_WorkProjects/EPFL_Projects/DNA-Aeon/arithmetic_modulator_error_correction/data/Dorn"
-    norec_out_path = "/home/lemageoire/2024/Development/5_WorkProjects/EPFL_Projects/DNA-Aeon/arithmetic_modulator_error_correction/Dorn"
+    orig_path = "/Users/mguyot/Documents/DNA-Aeon/arithmetic_modulator_error_correction/data/Dorn"
+    norec_out_path = "/Users/mguyot/Documents/DNA-Aeon/arithmetic_modulator_error_correction/Dorn"
     out_zip_name = "dorn_decoded_auto.zip"
-    conf_file_path = "/home/lemageoire/2024/Development/5_WorkProjects/EPFL_Projects/DNA-Aeon/eval_config.json"
+    conf_file_path = "/Users/mguyot/Documents/DNA-Aeon/eval_config.json"
     length = 172
     iterations = 1
     results = dict()
@@ -75,7 +75,7 @@ if __name__ == '__main__':
             "input": out_path,
             "output": out_zip_name,
             "length": length
-        }   
+        }
     }
     with open(conf_file_path, "w") as conf_file:
         json.dump(config, conf_file)
