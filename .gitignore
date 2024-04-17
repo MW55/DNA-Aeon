@@ -158,3 +158,14 @@ dmypy.json
 ## Local
 .idea/
 .idea/*.xml
+arithmetic_modulator_error_correction
+abseil-cpp
+.DS_Store
+abseil-cpp
+custom-scripts/compare_file.py
+abseil-cpp
+data/encoded.fasta
+data/encoded.ini
+data/results/D
+data/decoded.txt.zip
+Zippy

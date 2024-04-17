@@ -4,7 +4,6 @@ import pathlib
 import json
 import os
 
-
 def header_crc_mapper(header_crc_conf_entry, header_bool):
     #if not header_bool and header_crc_conf_entry:
     #    raise ValueError("Header is turned off but header crc length is not 0. Please adjust.")

@@ -165,18 +165,18 @@ int main(int argc, char *argv[]) {
     FreqTable freqs = FreqTable(motif, "", 0, false, codewordLen, pMap);
     freqs.calcFreqs();
     if (encode) {
-        if (static_cast<string>(config["encode"]["input"]).ends_with(".zip")) {
+        if (static_cast<string>((std::string)config["encode"]["input"]).ends_with(".zip")) {
             encode_zip(config, freqs, config["encode"]["min_length"], config["encode"]["same_length"], configPath);
         } else {
-            ifstream inStream(config["encode"]["input"], ios::binary);
+            ifstream inStream((std::string)config["encode"]["input"], ios::binary);
             assert(inStream.good());
             BitInStream bin(inStream, config["general"]["sync"]);
-            ofstream out(config["encode"]["output"], ios::binary);
+            ofstream out((std::string)config["encode"]["output"], ios::binary);
             inflating(freqs, bin, out, config["encode"]["min_length"]);
             if(config["encode"]["update_config"]){
                 out.flush();
                 out.close();
-                ifstream outin(config["encode"]["output"]);
+                ifstream outin((std::string)config["encode"]["output"]);
                 stringstream buffer;
                 buffer << outin.rdbuf();
                 string inp = buffer.str();
@@ -224,14 +224,14 @@ int main(int argc, char *argv[]) {
                 write_to_zip(config["decode"]["output"], true, static_cast<bool>(config["general"]["zip"]["most_common_only"]), static_cast<bool>(config["general"]["zip"]["decodable_only"]),results);
             }
         } else {
-            ifstream iStream(config["decode"]["input"]);
+            ifstream iStream((std::string)config["decode"]["input"]);
             stringstream buffer;
             buffer << iStream.rdbuf();
             string inp = buffer.str();
             thread_local ECdecoding ecDec = ECdecoding(inp, freqs, tMap, true, config);
 
             SeqEntry dec = ecDec.decode(codewordLen, motif, config);
-            ofstream out(config["decode"]["output"], ios::out | ios::binary);
+            ofstream out((std::string)config["decode"]["output"], ios::out | ios::binary);
             const vector<unsigned char> str = *dec.ac.bitout.get_data();
             std::string seq(reinterpret_cast<const char *>(str.data()), str.size());
             out << seq;
