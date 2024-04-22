@@ -129,6 +129,28 @@ nlohmann::json parseValidateConfig(string configPath, bool encode) {
     return config;
 }
 
+/**
+ * @brief main function
+ * 1) parse command line arguments
+ * 2) check we are either encoding or decoding 
+ * 3) parse and validate config file
+ * 4) read codewords and motifs
+ * 5) create probability map
+ * 6) create frequency table
+ * 7) transistion dict ?
+ * 8) if encoding:
+ *    - if input is a zip file, encode each file in the zip
+ *    - if input is a file, encode the file
+ * 9) if decoding:
+ *   - if input is a zip file, decode each file in the zip 
+ *   - if input is a fasta file, decode each sequence in the fasta file
+ *   - if input is a file, decode the file
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
+
 int main(int argc, char *argv[]) {
     res_lock = new std::mutex();
     argparse::ArgumentParser program("arithmetic_error_correction", "1.0.0");
@@ -158,13 +180,14 @@ int main(int argc, char *argv[]) {
     robin_hood::unordered_map<string, vector<string>> motif = readConcScheme(config["general"]["codebook"]["motifs"]); //hp4_gc40-60.json"
     
     int codewordLen = getCodewordLen(codewords);
-    auto propMap = ProbMap(codewordLen, false, codewords, motif);
-    robin_hood::unordered_map<string, int32_t> freqDict = propMap.freqDict();
-    robin_hood::unordered_map<string, char2double> pMap = propMap.createTransitionDict(freqDict);
+    auto propMap = ProbMap(codewordLen, false, codewords, motif); 
+    string2int32 freqDict = propMap.freqDict();
+    string2char2double pMap = propMap.createTransitionDict(freqDict);
     results = list<tuple<string, vector<unsigned char>>>();
     FreqTable freqs = FreqTable(motif, "", 0, false, codewordLen, pMap);
     freqs.calcFreqs();
     if (encode) {
+        DEBUG("Encoding");
         if (static_cast<string>((std::string)config["encode"]["input"]).ends_with(".zip")) {
             encode_zip(config, freqs, config["encode"]["min_length"], config["encode"]["same_length"], configPath);
         } else {
@@ -187,9 +210,11 @@ int main(int argc, char *argv[]) {
             }
         }
     } else {
+        DEBUG("Decoding");
         robin_hood::unordered_map<string, char2double> tMap = ProbMap(codewordLen, true, codewords,
                                                                 motif).createTransitionDict(freqDict);
         if (static_cast<string>(config["decode"]["input"]).ends_with(".zip")) {
+            DEBUG("Decoding zip file");
             Zippy::ZipArchive inarch(static_cast<string>(config["decode"]["input"]));
             std::vector<std::string> ents = inarch.GetEntryNames();
             absl::synchronization_internal::ThreadPool pool(config["general"]["threads"]);
@@ -204,14 +229,17 @@ int main(int argc, char *argv[]) {
                 this_thread::sleep_for(chrono::milliseconds(500));
             }
             {
-                std::unique_lock<std::mutex> uLock(*res_lock);
+                //std::unique_lock<std::mutex> uLock(*res_lock);
+                std::scoped_lock lock(*res_lock);
                 write_to_zip(config["decode"]["output"], true, static_cast<bool>(config["general"]["zip"]["most_common_only"]), static_cast<bool>(config["general"]["zip"]["decodable_only"]),results);
             }
         } else if (config["general"]["as_fasta"]) {
+            DEBUG("Decoding fasta file");
             // since we are returning a set, we wont have duplicates
             robin_hood::unordered_set<string> dna_lines = parseFasta(config["decode"]["input"]);
             absl::synchronization_internal::ThreadPool pool(config["general"]["threads"]);
             for (const string &line: dna_lines) {
+                DEBUG("Decoding: " + line);
                 pool.Schedule(std::bind(do_decode, std::ref(line), std::ref(freqs), std::ref(tMap), std::ref(motif), std::ref(config), std::ref(codewordLen), std::ref(results), std::ref(res_lock)));
             }
             //TODO THIS CONDITION SHOULD BE IMPROVED (right now we can not make "results" a set and thus might have duplicates)
@@ -224,6 +252,7 @@ int main(int argc, char *argv[]) {
                 write_to_zip(config["decode"]["output"], true, static_cast<bool>(config["general"]["zip"]["most_common_only"]), static_cast<bool>(config["general"]["zip"]["decodable_only"]),results);
             }
         } else {
+            DEBUG("Decoding file");
             ifstream iStream((std::string)config["decode"]["input"]);
             stringstream buffer;
             buffer << iStream.rdbuf();
@@ -239,4 +268,6 @@ int main(int argc, char *argv[]) {
             out.close();
         }
     }
+    std::flush(std::cout);
+    return 0;
 }

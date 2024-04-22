@@ -81,6 +81,13 @@ robin_hood::unordered_map<string, vector<string>> readConcScheme(const string &c
     return motif;
 }
 
+/**
+ * @brief Get the Codeword Len object
+ * returns the size of the first element of the set
+ * @param codewords 
+ * @return int 
+ */
+
 int getCodewordLen(robin_hood::unordered_set<string> &codewords) {
     return codewords.begin()->length();
 }

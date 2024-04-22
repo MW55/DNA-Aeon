@@ -8,6 +8,7 @@
 #include <mutex>
 #include <memory>
 
+#include "include/commons.h"
 #include "include/FreqTable.h"
 #include "include/ProbabilityEval.h"
 #include "include/ACDecode.h"
@@ -39,8 +40,7 @@ struct SeqEntry {
             pos(pos),
             ac(move(acDeflate)),
             freq(freqTable),
-            lastCrc(std::move(lCrc)) {};
-
+            lastCrc(std::move(lCrc)) { /*DEBUG("SeqEntry constructor");*/ };
 };
 
 struct compare_ptr {

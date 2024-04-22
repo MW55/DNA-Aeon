@@ -3,11 +3,27 @@ import argparse
 import pathlib
 import json
 import os
+import sys
 
-def decode_ac(current_path, config_path):
+
+# This function should printout the C++ output but it does not.
+# 1) solution use sys.stdout and sys.stderr as arguments for subprocess.Popen
+# @todo: I want a to print the output of the C++ program to a file.
+
+def decode_ac(current_path, config_path, mode="subprocess"):
     py_command = ("{cpath}/arithmetic_modulator_error_correction -d {conf_path}".format(cpath=current_path,
-                                                                                                conf_path=config_path))
-    process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
+                                                                                           conf_path=config_path))
+    if (mode == "subprocess"):
+        process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
+    elif (mode == "sys"):
+        process = subprocess.Popen(py_command.split(), stdout=sys.stdout, stderr=sys.stderr)
+    elif (mode == "file"):
+        process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
+        with open("debug/debug_output.txt", "w") as write_file:
+            write_file.write(str(process.stdout.read()))
+    else:
+        print("Invalid mode. Exiting...")
+        exit(1)
     output, error = process.communicate()
     return
 
@@ -32,19 +48,22 @@ def decode_norec_for_ac(current_path, config_data):
     os.chdir('../..')
     return
 
+# main should have an extra argument to specify the mode of the decode process "subprocess", "sys", "file"
+# main should have an extra argument to specify debug mode of the encode process
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Decode data that was encoded in DNA using the concatenation of the NOREC4DNA raptor-fountain implementation and DNA-Aeon.')
     parser.add_argument('--config', '-c', dest='conf', type=str, action='store',
                         help='path to the config file.', required=True)
+    parser.add_argument('--mode', '-m', dest='mode', type=str, action='store',
+                        help='mode of output. "subprocess", "sys", "file"', required=False, default="subprocess")
     args = parser.parse_args()
     cpath = pathlib.Path(__file__).parent.resolve()
     conf_path = pathlib.Path(args.conf).resolve()
     with open(args.conf, "r") as conf_inp:
         config_data = json.load(conf_inp)
-
     # Start outer decode
     print("Starting inner decoder.")
-    decode_ac(cpath, conf_path)
+    decode_ac(cpath, conf_path, args.mode)
     print("\nFinished inner decoding, starting outer decoder...\n")
     # Start inner encoder
     decode_norec_for_ac(cpath, config_data)

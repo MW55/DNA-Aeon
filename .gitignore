@@ -170,3 +170,6 @@ data/results/D
 data/decoded.txt.zip
 Zippy
 .vscode/launch.json
+.vscode/settings.json
+data/decoded.txt/*
+debug/debug_output.txt

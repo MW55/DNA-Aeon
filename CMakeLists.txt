@@ -5,6 +5,12 @@ set(BUILD_TESTING OFF)
 set(BUILD_TESTING_STATIC OFF)
 set(BUILD_TESTING_SHARED OFF)
 
+#I want an option to activate the debug macro
+option(ENABLE_DEBUG_MACRO "Enable the debug macro" OFF)
+
+if(ENABLE_DEBUG_MACRO)
+    add_definitions(-DENABLE_DEBUG_MACRO)
+endif()
 #Disabling Zippy extras
 set(BUILD_SAMPLES OFF)
 set(BUILD_TESTS OFF)

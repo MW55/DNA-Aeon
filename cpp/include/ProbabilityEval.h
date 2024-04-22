@@ -17,6 +17,7 @@
 using namespace std;
 
 typedef robin_hood::unordered_map<char, double> char2double;
+typedef robin_hood::unordered_map<string, char2double> string2char2double;
 typedef robin_hood::unordered_map<string, double> string2double;
 typedef robin_hood::unordered_map<string, int32_t> string2int32;
 typedef robin_hood::unordered_map<string, vector<string>> string2stringVec;
@@ -25,7 +26,7 @@ class ProbabilityEval {
 
 protected:
     bool normalized;
-    robin_hood::unordered_map<string, char2double> updatedDict;
+    string2char2double updatedDict;
     void loop();
     void update_cb();
     void addBase(char newBase);
@@ -60,7 +61,6 @@ class ProbMap {
         ProbMap(int cwL, bool norm, robin_hood::unordered_set<string>& cwds, string2stringVec& mot);
         robin_hood::unordered_map<string, char2double> createTransitionDict(string2int32 &freq_dict);
         string2int32 freqDict();
-
 };
 
 #endif //ARITHMETIC_MODULATOR_PY_PROBABILITYEVAL_H

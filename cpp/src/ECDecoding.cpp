@@ -8,6 +8,27 @@
 
 using namespace std;
 
+/**
+ * @brief Construct a new ECdecoding::ECdecoding object
+ * 1) set the messageLen to the length of the input string or to the value of the config
+ * 2) set the withCwProbs to the value of the withCWProbs parameter
+ * 3) set the readSeq to the input string
+ * 4) set the endFailed to true
+ * 5) set the frequencyMap to the freqs parameter
+ * 6) set the probMap to the pMap parameter
+ * 7) set the seqFlag to false
+ * 8) set the errorProb to the value of the error_probability parameter of the config
+ * 9) set the rate to the values of the rate parameter of the config
+ * 10) set the fanos to the result of the getFanos function with the errorProb and rate as parameters
+ * 
+ * 
+ * @param inp           read-only input string
+ * @param freqs         frequency table
+ * @param pMap          map of probabilities
+ * @param withCWProbs   a boolean flag
+ * @param config        json object with the configuration
+ */
+
 ECdecoding::ECdecoding(string inp, FreqTable &freqs, robin_hood::unordered_map<string, char2double> &pMap, bool withCWProbs, nlohmann::json &config) :
         messageLen(config["decode"]["length"] <= 0 ? inp.size() : static_cast<uint32_t>(config["decode"]["length"])),
         withCwProbs(withCWProbs),
@@ -37,6 +58,15 @@ char ECdecoding::defaultReturn(string &basicString, uint32_t index) {
         return basicString[index];
 }
 
+/**
+ * @brief 
+ * 
+ * @param sequence 
+ * @param fanoMetrics 
+ * @param nextProbs 
+ * @param bases 
+ */
+
 void ECdecoding::metricProbs(SeqEntry &sequence, array<double, 2> &fanoMetrics,
                              char2double &nextProbs, array<char, 4> &bases) {
 
@@ -48,6 +78,8 @@ void ECdecoding::metricProbs(SeqEntry &sequence, array<double, 2> &fanoMetrics,
     }
     checkDels(sequence);
 }
+
+
 
 void ECdecoding::updateState(SeqEntry &sequence,
                              bool hit, char2double &nextProbs, char base, int increNum) {
@@ -108,6 +140,16 @@ void ECdecoding::checkpointCheck(const SeqEntry &sequence) {
     }
 }
 
+/**
+ * @brief 
+ * fanoCheck is called for each base in the sequence. ?
+ * 
+ * 
+ * @param sequence 
+ * @param nextProbs 
+ * @param base 
+ */
+
 void ECdecoding::fanoCheck(SeqEntry &sequence, char2double &nextProbs, char base) {
     //switched sequence.pos to sequence.seq.size(), as it would lead to wrong results if indels are present
     if (sequence.seq.size() > messageLen)
@@ -124,6 +166,12 @@ void ECdecoding::fanoCheck(SeqEntry &sequence, char2double &nextProbs, char base
     }
 }
 
+/**
+ * @brief 
+ * 
+ * @param sequence 
+ */
+
 void ECdecoding::checkDels(SeqEntry &sequence) {
     for (auto &baseDel: array<char, 4>{'A', 'T', 'C', 'G'}) {
         SeqEntry newSeqDel = sequence;
@@ -133,6 +181,14 @@ void ECdecoding::checkDels(SeqEntry &sequence) {
         }
     }
 }
+
+/**
+ * @brief 
+ * 
+ * @param sequence 
+ * @param base 
+ * @param nextProbs 
+ */
 
 void ECdecoding::checkIns(SeqEntry &sequence, char base, char2double &nextProbs) {
     if (defaultReturn(readSeq, sequence.pos + 1) == base) {
@@ -144,6 +200,33 @@ void ECdecoding::checkIns(SeqEntry &sequence, char base, char2double &nextProbs)
 void ECdecoding::queueInsert(SeqEntry &sequence) {
     queue.insert(std::make_unique<SeqEntry>(sequence));
 }
+
+/**
+ * @brief QueueCheck consists of the following steps: 
+ * use config["decode"]["threshold"]["loop"] as a threshold
+ * 
+ * 1) create a vector of SeqEntry objects
+ * 2) we push back the first element of the queue in the vector
+ * 3) we erase the first element of the queue
+ * while counter smaller than the threshold and the queue is not empty
+ * 4) we check that the sequence size is not equal to the messageLen
+ * 5) we push back the first element of the queue in the vector
+ * 6) we erase the first element of the queue
+ * 7) we increment the counter
+ * 
+ * 8) for each seqEntry in the seqEvals vector
+ * 9) we calculate the nextProbs
+ * 10) we calculate the metricProbs
+ * 11) if the queue size is bigger than the config["decode"]["queue"]["size"]
+ * 12) we increment the queueCounter¨
+ * 13) if the queueCounter is bigger than the config["decode"]["queue"]["runs"]
+ * 14) we throw a logic_error
+ * 15) we create an iterator to the first element of the queue
+ * 16) we erase the elements from the queue from the reduce_to position to the end
+ * 
+ * @param fanoMetrics 
+ * @param bases 
+ */
 
 void ECdecoding::queueCheck(array<double, 2> &fanoMetrics, array<char, 4> &bases) {
     vector<SeqEntry> seqEvals;
@@ -200,12 +283,39 @@ array<double, 2> ECdecoding::getFanos(double errorProb, array<int, 2> &rate) {
     return fanos;
 }
 
+/**
+ * @brief 
+ * 1) generate the bases
+ * 2) extract e_rate from the config ?
+ * 3) get the fanoMetrics(errorProb, e_rate)
+ * 
+ * 4) create a ProbabilityEval object 
+ * 5) get the nextProbsSingleLetter from the ProbabilityEval object
+ * 6) create a DecodedData object
+ * 7) create a BitOutStream object
+ * 8) create a Deflate object with 16 bits and the BitOutStream object ?
+ * 9) create a SeqEntry object with the probability, the sequence, the position, the Deflate object and the frequencyMap
+ * 10) copy the sequence to the baseLine object
+ * 11) put the baseLine object in the crcCheckpoint map
+ * 12) calculate the metricProbs
+ * 13) start the mainLoop
+ * 14) return the best candidate ?
+ * 15) return SeqEntry object
+ * 
+ * @param codewordLen length of the codeword
+ * @param motif       map of motifs (key: motif, value: vector of motifs), which is used to calculate the probabilities
+ * @param config      json object with the configuration
+ * @return SeqEntry   decoded sequence ?
+ */
+
 
 SeqEntry ECdecoding::decode(int codewordLen, robin_hood::unordered_map<string, vector<string>> &motif, nlohmann::json &config) {
     array<char, 4> bases{'A', 'T', 'C', 'G'};
     int itCount = 0;
     array<int, 2> e_rate = {config["decode"]["metric"]["fano"]["rate"]["low"],config["decode"]["metric"]["fano"]["rate"]["high"]};
+    DEBUG("Starting decoding with error rate: " << errorProb << " and rates: " << e_rate[0] << " " << e_rate[1]);
     array<double, 2> fanoMetrics = getFanos(errorProb, e_rate);
+    DEBUG("Fano metrics: " << fanoMetrics[0] << " " << fanoMetrics[1]);
     string s;
     ProbabilityEval currSeq = ProbabilityEval(s, motif, 0, true, codewordLen, &probMap);
     char2double nextProbs = currSeq.nextProbsSingleLetter();
@@ -254,6 +364,17 @@ SeqEntry ECdecoding::decode(int codewordLen, robin_hood::unordered_map<string, v
     return res;
 }
 
+/**
+ * @brief 
+ * 1) check if we are not at the end of the queue
+ * we queueCheck(fanoMetrics, bases) => how does it update ?
+ * if the queue is empty, throw an out_of_range exception
+ * 
+ * @param fanoMetrics   array of fano metrics
+ * @param bases         the 4 bases (A, T, C, G)
+ * @param itCount       iteration counter
+ */
+
 void ECdecoding::mainLoop(array<double, 2> &fanoMetrics, array<char, 4> &bases, int itCount) {
     // Stopping when the best candidate has the desired length is suboptimal.
     while ((**queue.begin()).seq.size() != messageLen) {
@@ -264,6 +385,19 @@ void ECdecoding::mainLoop(array<double, 2> &fanoMetrics, array<char, 4> &bases, 
         }
     }
 }
+
+/**
+ * @brief the checkCandidate function
+ * 1) push back the candidate in the candidates vector (from ECdecoding class)
+ * 2) if the size of the candidates vector is bigger than the threshold
+ * 3) get the best candidate by using the min_element function
+ * 4) return the best candidate
+ * 5) else set the endFailed to true and return the candidate
+ * 
+ * @param can 
+ * @param threshold 
+ * @return SeqEntry 
+ */
 
 SeqEntry ECdecoding::checkCandidate(SeqEntry &can, unsigned long threshold) {
     candidates.push_back(can);
@@ -277,10 +411,36 @@ SeqEntry ECdecoding::checkCandidate(SeqEntry &can, unsigned long threshold) {
     }
 }
 
-void do_decode(const string &inp, FreqTable &freqs, robin_hood::unordered_map<string, char2double> &tMap, robin_hood::unordered_map<string, vector<string>> &motif,
-               nlohmann::json &config, int &codewordLen, list<tuple<string, vector<unsigned char>>> &results, std::mutex *res_lock) {
+/**
+ * @brief this function is called from the main function
+ * 1) try to create an ECdecoding
+ * 2) call the decode function
+ * 3) the dec.metric double is converted to a string
+ * 4) the data is extracted from the Deflate object in the SeqEntry object
+ * 5) then we aquire the lock for the results (unique_lock of std::mutex)
+ * 6) we push back a list of tuples of (string, vector<uc>)
+ * 
+ * @param inp           read-only input string
+ * @param freqs         frequency table
+ * @param tMap          map of probabilities
+ * @param motif         map of motifs
+ * @param config        json object with the configuration
+ * @param codewordLen   length of the codeword
+ * @param results       list of tuples with the results
+ * @param res_lock      mutex for the results
+ */
+
+void do_decode(const string &inp,
+               FreqTable &freqs,
+               robin_hood::unordered_map<string, char2double> &tMap, 
+               robin_hood::unordered_map<string, vector<string>> &motif,
+               nlohmann::json &config,
+               int &codewordLen, 
+               list<tuple<string, vector<unsigned char>>> &results,
+               std::mutex *res_lock) {
     string metric_str = "ERR";
     vector<unsigned char> data = {};
+
     try {
         ECdecoding ecDec = ECdecoding(inp, freqs, tMap, true, config);
         SeqEntry dec = ecDec.decode(codewordLen, motif, config);
@@ -291,7 +451,10 @@ void do_decode(const string &inp, FreqTable &freqs, robin_hood::unordered_map<st
         WARN("No candidate found.");
     }
     {
-        std::unique_lock<std::mutex> uLock(*res_lock);
-        results.emplace_back(metric_str, data);
+        //we emplace back even if data is empty ?
+        //std::unique_lock<std::mutex> uLock(*res_lock);
+        std::scoped_lock lock(*res_lock); //C++17
+        results.emplace_back(metric_str, data); //shouldn't I use std::move of std::tuple<string, vector<unsigned char>> ?
+        //results.emplace_back(std::move(std::make_tuple(metric_str, data))); ?
     }
 }
