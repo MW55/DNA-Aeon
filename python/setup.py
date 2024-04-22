@@ -8,23 +8,21 @@ import sys
 
 
 def create_norec_env(current_path):
-    venv_dir = "{cpath}/NOREC4DNA/venv".format(cpath=current_path)
+    venv_dir = "{cpath}/libraries/NOREC4DNA/venv".format(cpath=current_path)
     create(venv_dir, with_pip=True)
 
 def install_norec_packages(current_path):
-    run(["venv/bin/pip", "install", "wheel"], cwd="{cpath}/NOREC4DNA".format(cpath=current_path))
-    run(["venv/bin/pip", "install", "-r", abspath("./NOREC_requirements.txt")], cwd="{cpath}/NOREC4DNA".format(cpath=current_path)) #"./NOREC_requirements.txt"
+    run(["venv/bin/pip", "install", "wheel"], cwd="{cpath}/libraries/NOREC4DNA".format(cpath=current_path))
+    run(["venv/bin/pip", "install", "-r", abspath("./python/NOREC_requirements.txt")], cwd="{cpath}/libraries/NOREC4DNA".format(cpath=current_path)) #"./NOREC_requirements.txt"
 
 #before running cmake you should move to the build directory
 def compile_dna_aeon(current_path, debug_mode):
     current_path = "{cpath}/build".format(cpath=current_path)
     print("Current path: ", current_path)
-    #I want to be in the build directory
     if debug_mode == True :
         run(["cmake", "-DENABLE_DEBUG_MACRO=ON", current_path])
     else :
         run(["cmake", current_path])
-    #nothing to be done for `/
     run(["make"], cwd=current_path) 
 
 # Main function should offers debug options for cmake
