@@ -15,3 +15,5 @@ fi
 else
     # Generate codebooks for the default configuration
     ../python/generate_codebooks.py --Path "../libraries/ContrainedKaos/ConstrainedKaos.jar" --Output "../configs/codebooks/default_codebooks.json" -hp 4
+    echo "Codebooks generated for the default configuration done!"
+fi
