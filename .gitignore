@@ -173,3 +173,4 @@ Zippy
 .vscode/settings.json
 data/decoded.txt/*
 debug/debug_output.txt
+configs/data/decoded.txt/*

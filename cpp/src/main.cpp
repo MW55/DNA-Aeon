@@ -11,7 +11,7 @@
 #include "../include/ACEncode.h"
 #include "../include/ECDecoding.h"
 #include "include/FastaParser.h"
-#include "../../Zippy/library/Zippy/ZipArchive.hpp"
+#include "../../libraries/Zippy/library/Zippy/ZipArchive.hpp"
 
 
 using namespace std;
@@ -213,6 +213,7 @@ int main(int argc, char *argv[]) {
         DEBUG("Decoding");
         robin_hood::unordered_map<string, char2double> tMap = ProbMap(codewordLen, true, codewords,
                                                                 motif).createTransitionDict(freqDict);
+        array<int, 2> e_rate = {config["decode"]["metric"]["fano"]["rate"]["low"],config["decode"]["metric"]["fano"]["rate"]["high"]};
         if (static_cast<string>(config["decode"]["input"]).ends_with(".zip")) {
             DEBUG("Decoding zip file");
             Zippy::ZipArchive inarch(static_cast<string>(config["decode"]["input"]));
@@ -223,7 +224,16 @@ int main(int argc, char *argv[]) {
                 inpts.push_back(inarch.GetEntry(ent).GetDataAsString());
             }
             for (auto &inp: inpts) {
-                pool.Schedule(std::bind(do_decode, std::ref(inp), std::ref(freqs), std::ref(tMap), std::ref(motif), std::ref(config), std::ref(codewordLen), std::ref(results), std::ref(res_lock)));
+                pool.Schedule(std::bind(do_decode,
+                                std::ref(inp), 
+                                std::ref(freqs), 
+                                std::ref(tMap), 
+                                std::ref(motif), 
+                                std::ref(config), 
+                                std::ref(codewordLen), 
+                                std::ref(results), 
+                                std::ref(res_lock),
+                                std::ref(e_rate)));
             }
             while (results.size() != ents.size()) {
                 this_thread::sleep_for(chrono::milliseconds(500));
@@ -238,9 +248,21 @@ int main(int argc, char *argv[]) {
             // since we are returning a set, we wont have duplicates
             robin_hood::unordered_set<string> dna_lines = parseFasta(config["decode"]["input"]);
             absl::synchronization_internal::ThreadPool pool(config["general"]["threads"]);
-            for (const string &line: dna_lines) {
-                DEBUG("Decoding: " + line);
-                pool.Schedule(std::bind(do_decode, std::ref(line), std::ref(freqs), std::ref(tMap), std::ref(motif), std::ref(config), std::ref(codewordLen), std::ref(results), std::ref(res_lock)));
+            DEBUG(dna_lines.size());
+            
+            //DEBUG("Starting decoding with error rate: " << errorProb << " and rates: " << e_rate[0] << " " << e_rate[1]);
+            //DEBUG("Fano metrics: " << fanoMetrics[0] << " " << fanoMetrics[1]);
+            for (const string &line: dna_lines) {    
+                pool.Schedule(std::bind(do_decode,  
+                              std::ref(line), 
+                              std::ref(freqs),
+                              std::ref(tMap), 
+                              std::ref(motif),
+                              std::ref(config),
+                              std::ref(codewordLen),
+                              std::ref(results),
+                              std::ref(res_lock),
+                              std::ref(e_rate)));
             }
             //TODO THIS CONDITION SHOULD BE IMPROVED (right now we can not make "results" a set and thus might have duplicates)
             // ideally we would not want any (semi) busy waiting and instead be notified when the threadpool is done
@@ -258,8 +280,7 @@ int main(int argc, char *argv[]) {
             buffer << iStream.rdbuf();
             string inp = buffer.str();
             thread_local ECdecoding ecDec = ECdecoding(inp, freqs, tMap, true, config);
-
-            SeqEntry dec = ecDec.decode(codewordLen, motif, config);
+            SeqEntry dec = ecDec.decode(codewordLen, motif, config, e_rate);
             ofstream out((std::string)config["decode"]["output"], ios::out | ios::binary);
             const vector<unsigned char> str = *dec.ac.bitout.get_data();
             std::string seq(reinterpret_cast<const char *>(str.data()), str.size());

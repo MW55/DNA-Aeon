@@ -4,6 +4,8 @@ from venv import create
 from os.path import abspath
 import sys
 
+#todo: activate an option to just run cmake and just compile the project
+
 
 def create_norec_env(current_path):
     venv_dir = "{cpath}/NOREC4DNA/venv".format(cpath=current_path)
@@ -30,11 +32,15 @@ if __name__ == "__main__":
         debug_mode = False
         print("Release mode enabled")
     cpath = pathlib.Path(__file__).parent.resolve()
-    print("Setting up NOREC4DNA virtual environment.")
-    create_norec_env(cpath)
-    print("Installing packages required for NOREC4DNA.")
-    install_norec_packages(cpath)
-    print("Compiling DNA Aeon")
-    compile_dna_aeon(cpath, debug_mode)
-    print("Installation finished!")
+    if len(args) > 1:
+        if args[1] == "cmake":
+            compile_dna_aeon(cpath, debug_mode)
+        else:
+            print("Setting up NOREC4DNA virtual environment.")
+            create_norec_env(cpath)
+            print("Installing packages required for NOREC4DNA.")
+            install_norec_packages(cpath)
+            print("Compiling DNA Aeon")
+            compile_dna_aeon(cpath, debug_mode)
+            print("Installation finished!")
 

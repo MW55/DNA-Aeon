@@ -1,3 +1,8 @@
+#to-do: testing mode
+#to-do: setting the binary output folder
+#to-do: setting the library output folder ?
+
+
 cmake_minimum_required(VERSION 3.16.3)
 project(arithmetic_modulator_error_correction)
 set(ABSL_PROPAGATE_CXX_STD ON)
@@ -7,6 +12,7 @@ set(BUILD_TESTING_SHARED OFF)
 
 #I want an option to activate the debug macro
 option(ENABLE_DEBUG_MACRO "Enable the debug macro" OFF)
+option(ENABLE_TESTING "Enable the testing" OFF)
 
 if(ENABLE_DEBUG_MACRO)
     add_definitions(-DENABLE_DEBUG_MACRO)
@@ -16,8 +22,15 @@ set(BUILD_SAMPLES OFF)
 set(BUILD_TESTS OFF)
 set(CREATE_DOCS OFF)
 
-add_subdirectory(abseil-cpp)
-add_subdirectory(Zippy)
+add_subdirectory(libraries/abseil-cpp)
+add_subdirectory(libraries/Zippy)
+
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DENABLE_DEBUG_MACRO -ggdb3")
 set(CMAKE_CXX_STANDARD 20)
@@ -44,5 +57,9 @@ add_executable(arithmetic_modulator_error_correction
 
 target_link_libraries(arithmetic_modulator_error_correction absl::btree absl::flat_hash_set absl::flat_hash_map)
 
-enable_testing ()
-add_subdirectory (test)
+if (ENABLE_TESTING)
+    #add_definitions(-DENABLE_TESTING)
+    enable_testing ()
+    add_subdirectory (test)
+endif()
+

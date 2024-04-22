@@ -19,8 +19,13 @@
 #define VERBOSE(x) do { cout << "[V] " << x << std::endl; } while (0)
 #define INFO(x) do { cout << "[i] " << x << endl; } while (0)
 #endif
+#ifndef ENABLE_WARM_MACRO
+#define WARN(x)
+#define SUCCESS(x)
+#define ERROR(x)
+#else
 #define WARN(x) do { cout << "[!] " << x << endl; } while (0)
 #define SUCCESS(x) do { cout << "[+] " << x << endl; } while (0)
 #define ERROR(x) do { cerr << "[!] " << x << endl; } while (0)
-
+#endif
 #endif //ARITHMETIC_MODULATOR_ERROR_CORRECTION_DEBUG_LOG_H

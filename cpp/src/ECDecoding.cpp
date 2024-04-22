@@ -309,13 +309,15 @@ array<double, 2> ECdecoding::getFanos(double errorProb, array<int, 2> &rate) {
  */
 
 
-SeqEntry ECdecoding::decode(int codewordLen, robin_hood::unordered_map<string, vector<string>> &motif, nlohmann::json &config) {
+SeqEntry ECdecoding::decode(int codewordLen,
+                            robin_hood::unordered_map<string, vector<string>> &motif, 
+                            nlohmann::json &config,
+                            std::array<int, 2> &e_rate) {
     array<char, 4> bases{'A', 'T', 'C', 'G'};
     int itCount = 0;
-    array<int, 2> e_rate = {config["decode"]["metric"]["fano"]["rate"]["low"],config["decode"]["metric"]["fano"]["rate"]["high"]};
-    DEBUG("Starting decoding with error rate: " << errorProb << " and rates: " << e_rate[0] << " " << e_rate[1]);
+    //array<int, 2> e_rate = {config["decode"]["metric"]["fano"]["rate"]["low"],config["decode"]["metric"]["fano"]["rate"]["high"]};
     array<double, 2> fanoMetrics = getFanos(errorProb, e_rate);
-    DEBUG("Fano metrics: " << fanoMetrics[0] << " " << fanoMetrics[1]);
+    //DEBUG("Fano metrics: " << fanoMetrics[0] << " " << fanoMetrics[1]);
     string s;
     ProbabilityEval currSeq = ProbabilityEval(s, motif, 0, true, codewordLen, &probMap);
     char2double nextProbs = currSeq.nextProbsSingleLetter();
@@ -403,7 +405,7 @@ SeqEntry ECdecoding::checkCandidate(SeqEntry &can, unsigned long threshold) {
     candidates.push_back(can);
     if (candidates.size() > threshold) {
         SeqEntry bestCan = *min_element(candidates.begin(), candidates.end());
-        DEBUG("Final candidate: " << bestCan.seq);
+        //DEBUG("Final candidate: " << bestCan.seq);
         return bestCan;
     } else {
         endFailed = true;
@@ -437,13 +439,13 @@ void do_decode(const string &inp,
                nlohmann::json &config,
                int &codewordLen, 
                list<tuple<string, vector<unsigned char>>> &results,
-               std::mutex *res_lock) {
+               std::mutex *res_lock,
+               std::array<int, 2> &e_rate) {
     string metric_str = "ERR";
     vector<unsigned char> data = {};
-
     try {
         ECdecoding ecDec = ECdecoding(inp, freqs, tMap, true, config);
-        SeqEntry dec = ecDec.decode(codewordLen, motif, config);
+        SeqEntry dec = ecDec.decode(codewordLen, motif, config, e_rate);
         metric_str = to_string(dec.metric);
         data = *dec.ac.bitout.get_data();
     }

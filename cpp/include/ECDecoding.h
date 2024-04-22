@@ -109,13 +109,17 @@ public:
     ECdecoding(string inp, FreqTable &freqs, robin_hood::unordered_map<string, char2double> &probMap,
                bool withCWProbs, nlohmann::json &config);
 
-    SeqEntry decode(int codewordLen, robin_hood::unordered_map<string, vector<string>> &conc, nlohmann::json &config);
+    SeqEntry decode(int codewordLen, 
+                    robin_hood::unordered_map<string, vector<string>> &conc, 
+                    nlohmann::json &config,
+                    std::array<int, 2> &e_rate);
 
 };
 
 extern void do_decode(const string &inp, FreqTable &freqs,
                       robin_hood::unordered_map<string, char2double> &tMap, robin_hood::unordered_map<string, vector<string>> &motif,
                       nlohmann::json &config, int &codewordLen, list<tuple<string, vector<unsigned char>>> &results,
-                      std::mutex *res_lock);
+                      std::mutex *res_lock,
+                      std::array<int, 2> &e_rate);
 
 #endif //ARITHMETIC_MODULATOR_ERROR_CORRECTION_ECDECODING_H

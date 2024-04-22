@@ -51,7 +51,8 @@ void test_simple_en_decode(tuple<uint8_t, string, string, string, string> tup, n
     results.clear();
     config["decode"]["length"] = s.size();
     config["general"]["sync"] = sync;
-    do_decode(s, freqs, tMap, motif, config, codewordLen, results, res_lock);
+    std::array<int, 2> e_rate{config["decode"]["metric"]["fano"]["rate"]["low"], config["decode"]["metric"]["fano"]["rate"]["high"]};
+    do_decode(s, freqs, tMap, motif, config, codewordLen, results, res_lock, e_rate);
     ALEPH_ASSERT_EQUAL(results.size(), 1);
     msg = get<1>(results.front());
     string t(msg.begin(), msg.end());
@@ -62,7 +63,7 @@ void test_simple_en_decode(tuple<uint8_t, string, string, string, string> tup, n
     //s2.at(s2.size() - 3) = 'C';
     results.clear();
     config["decode"]["length"] = s2.size();
-    do_decode(s2, freqs, tMap, motif, config, codewordLen, results, res_lock);
+    do_decode(s2, freqs, tMap, motif, config, codewordLen, results, res_lock, e_rate);
     ALEPH_ASSERT_EQUAL(results.size(), 1);
     msg = get<1>(results.front());
     string t2(msg.begin(), msg.end());
@@ -132,7 +133,7 @@ void test_load_zip_store_fasta_circle(const robin_hood::unordered_set<string> &i
         pool.Schedule(
                 [inp, &capture = freqs, &capture4 = pMap, &capture5 = motif, &capture6 = config, &capture7 = codewordLen, &capture1 = results] {
                     return do_decode(inp, capture, capture4, capture5, capture6, capture7, capture1,
-                                     res_lock);
+                                     res_lock, e_rate);
                 });
 #else
         do_decode(inp, freqs, pMap, motif, config, codewordLen, std::ref(results), res_lock);

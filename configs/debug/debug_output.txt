@@ -1,0 +1,1 @@
+b'[D] Decoding\n[D] Decoding fasta file\n[D] 490\n'
