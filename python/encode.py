@@ -28,7 +28,7 @@ def encode_norec_for_ac(config_data, current_path):
     error_detection = config_data["NOREC4DNA"]["error_detection"]
     header_crc_str = "" if not header_crc_mapper(config_data["NOREC4DNA"]["header_crc_length"], config_data["NOREC4DNA"]["insert_header"]) else " --header_crc_str " + header_crc_mapper(config_data["NOREC4DNA"]["header_crc_length"], config_data["NOREC4DNA"]["insert_header"]) + "" 
     filename = input_file.split("/")[-1]
-    py_command = ("{cpath}/NOREC4DNA/venv/bin/python3 {cpath}/NOREC4DNA/demo_raptor_encode.py --chunk_size {chunk_size_str} --error_correction {err_det} --save_as_zip {file}{ins_header}{crc_str} --overhead {redundancy}".format(
+    py_command = ("{cpath}/libraries/NOREC4DNA/venv/bin/python3 {cpath}/libraries/NOREC4DNA/demo_raptor_encode.py --chunk_size {chunk_size_str} --error_correction {err_det} --save_as_zip {file}{ins_header}{crc_str} --overhead {redundancy}".format(
         cpath=current_path, chunk_size_str=str(chunk_size), file=input_file, redundancy=packet_redundancy, ins_header=header, err_det=error_detection, crc_str=header_crc_str))
     process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
@@ -37,7 +37,7 @@ def encode_norec_for_ac(config_data, current_path):
     # os.rename(config, NOREC4DNA_BASE_PATH + "/" + filename + ".ini")
     with open(norec_config, "r") as c_:
         line_list = c_.readlines()
-        line_list[0] = "[{cpath}/data/{fname}_RU10.zip]\n".format(cpath=current_path, fname=filename) #"[../data/" + filename + "_RU10.zip]\n"
+        line_list[0] = "[{cpath}/configs/data/{fname}_RU10.zip]\n".format(cpath=current_path, fname=filename) #"[../data/" + filename + "_RU10.zip]\n"
         if config_data["NOREC4DNA"]["header_crc_length"] == 0:
             del(line_list[-6])
         with open("{cpath}/{ini_path}".format(cpath=current_path, ini_path=config_data["decode"]["NOREC4DNA_config"]), "w") as o_:
@@ -53,11 +53,11 @@ def encode_ac(current_path, config):
     :return:
     """
     filename = config["encode"]["input"].split("/")[-1]
-    config["encode"]["input"] = "{cpath}/data/{filename}_RU10.zip".format(cpath=current_path, filename=filename)
+    config["encode"]["input"] = "{cpath}/configs/data/{filename}_RU10.zip".format(cpath=current_path, filename=filename)
     with open("intermediate_config.json", "w") as inter:
         json.dump(config, inter)
     # Inner encoder command
-    py_command = ("{cpath}/arithmetic_modulator_error_correction -e {cpath}/{config_file}".format(
+    py_command = ("{cpath}/bin/arithmetic_modulator_error_correction -e {cpath}/{config_file}".format(
         cpath=current_path, config_file="intermediate_config.json"))
     process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()

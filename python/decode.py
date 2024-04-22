@@ -11,7 +11,7 @@ import sys
 # @todo: I want a to print the output of the C++ program to a file.
 
 def decode_ac(current_path, config_path, mode="subprocess"):
-    py_command = ("{cpath}/arithmetic_modulator_error_correction -d {conf_path}".format(cpath=current_path,
+    py_command = ("{cpath}/bin/arithmetic_modulator_error_correction -d {conf_path}".format(cpath=current_path,
                                                                                            conf_path=config_path))
     if (mode == "subprocess"):
         process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
@@ -19,7 +19,7 @@ def decode_ac(current_path, config_path, mode="subprocess"):
         process = subprocess.Popen(py_command.split(), stdout=sys.stdout, stderr=sys.stderr)
     elif (mode == "file"):
         process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
-        with open("debug/debug_output.txt", "w") as write_file:
+        with open("configs/debug/debug_output.txt", "w") as write_file:
             write_file.write(str(process.stdout.read()))
     else:
         print("Invalid mode. Exiting...")
@@ -41,7 +41,7 @@ def decode_norec_for_ac(current_path, config_data):
             o_.writelines(line_list)
     pathlib.Path('data/results').mkdir(parents=True, exist_ok=True)
     os.chdir('data/results')
-    py_command = ("{cpath}/NOREC4DNA/venv/bin/python3 {cpath}/NOREC4DNA/ConfigWorker.py {ipath}".format(
+    py_command = ("{cpath}/libraries/NOREC4DNA/venv/bin/python3 {cpath}/libraries/NOREC4DNA/ConfigWorker.py {ipath}".format(
         cpath=current_path, ipath=ini_path))
     process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     print("\nFinished inner decoding, starting outer decoder...\n")
     # Start inner encoder
     decode_norec_for_ac(cpath, config_data)
-    print("\nFinished outer decoding. File can be found at {cur_path}/data/results/{inp_file}".format(
+    print("\nFinished outer decoding. File can be found at {cur_path}/config/data/results/{inp_file}".format(
         cur_path=cpath, inp_file=config_data["encode"]["input"].split("/")[-1]))
     '''
     file_ext = "" if config_data["general"]["as_fasta"] else ".zip"
