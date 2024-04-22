@@ -174,3 +174,6 @@ Zippy
 data/decoded.txt/*
 debug/debug_output.txt
 configs/data/decoded.txt/*
+libraries/*
+libraries/*/*/*
+libraries/*/*

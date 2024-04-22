@@ -15,23 +15,30 @@ def install_norec_packages(current_path):
     run(["venv/bin/pip", "install", "wheel"], cwd="{cpath}/NOREC4DNA".format(cpath=current_path))
     run(["venv/bin/pip", "install", "-r", abspath("./NOREC_requirements.txt")], cwd="{cpath}/NOREC4DNA".format(cpath=current_path)) #"./NOREC_requirements.txt"
 
+#before running cmake you should move to the build directory
 def compile_dna_aeon(current_path, debug_mode):
+    current_path = "{cpath}/build".format(cpath=current_path)
+    print("Current path: ", current_path)
+    #I want to be in the build directory
     if debug_mode == True :
         run(["cmake", "-DENABLE_DEBUG_MACRO=ON", current_path])
     else :
         run(["cmake", current_path])
-    run(["cmake", "--build", current_path]) 
+    #nothing to be done for `/
+    run(["make"], cwd=current_path) 
 
 # Main function should offers debug options for cmake
 if __name__ == "__main__":
     args = sys.argv[1:]
-    if args[0] == "debug":
+    
+    if args and args[0] == "debug":
         debug_mode = True
         print("Debug mode enabled")
     else:
         debug_mode = False
         print("Release mode enabled")
-    cpath = pathlib.Path(__file__).parent.resolve()
+    cpath = pathlib.Path(__file__).parent.parent.resolve()
+    #print("Current path: ", cpath)
     if len(args) > 1:
         if args[1] == "cmake":
             compile_dna_aeon(cpath, debug_mode)
@@ -43,4 +50,3 @@ if __name__ == "__main__":
             print("Compiling DNA Aeon")
             compile_dna_aeon(cpath, debug_mode)
             print("Installation finished!")
-
