@@ -11,7 +11,6 @@ def read_fasta(seq, file_name):
                 seq.append(line.strip().upper())
     return seq
 
-
 def string_splitting(seq):
     str_map = dict()
     str_map['motif'] = defaultdict(list)
@@ -44,7 +43,6 @@ if __name__ == "__main__":
 
     if args.gc and (args.gcl or args.gch):
         parser.error('Only use either --GC (hard constraint) or the interval --GCLow and --GCHigh (soft constraint).')
-
 
     seq = []
     if args.motifs:
