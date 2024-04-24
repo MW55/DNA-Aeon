@@ -271,6 +271,9 @@ if __name__ == '__main__':
         print("Please provide the file name (with extension) as an argument")
         exit(1)
     DNA_AEON_PATH = str(pathlib.Path(__file__).parent.parent.resolve())
+    if DNA_AEON_PATH == "":
+        print("Please provide the path to the DNA-Aeon directory")
+        exit(1)
     NOREC4DNA_BASE_PATH = DNA_AEON_PATH + "/libraries/NOREC4DNA"
     INPUT_DATA = DNA_AEON_PATH + "/data"
     FILENAME = DNA_AEON_PATH + "/data/" + sys.argv[1]
