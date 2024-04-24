@@ -45,8 +45,16 @@ def modify_seq(original, pos_sub, pos_ins, pos_del):
         modified = deletions(modified, pos_del)
     return modified  # , len(pos_sub), len(pos_ins), len(pos_del)
 
-
 def modify_seqs(seqs, results, num_subs, num_dels, num_ins):
+    """
+    modify all the sequences
+    :param seqs: list of sequences
+    :param results: dictionary containing the number of errors
+    :param num_subs: number of substitutions
+    :param num_dels: number of deletions
+    :param num_ins: number of insertions
+    :return: modified sequences
+    """
     enc_data_len = sum([len(seq) for seq in seqs])
     one_seq_len = len(seqs[0])  # assuming all seqs have the same length
     all_pos_subs = np.random.choice(enc_data_len, num_subs, replace=False)
@@ -63,7 +71,6 @@ def modify_seqs(seqs, results, num_subs, num_dels, num_ins):
         modified_seqs.append(modify_seq(seq, pos_sub, pos_ins, pos_del))
         mult += 1
     return modified_seqs
-
 
 def calculate_num_chunks(file, chunk_size):
     """
@@ -126,6 +133,23 @@ def encode_mutate_decode(file, encoder_function, decoder_function, code_name, nu
     :param num_errors:
     :param repeat:
     :return:
+
+    the function if the file is not pre-encoded, it will encode it and store it in a file
+    otherwise parse the fasta file
+    in res which is a dictionary, the following keys are stored:
+    - encoded_bases: number of bases in the encoded data
+    - encoded_bytes: number of bytes in the encoded data (2 bits per base / 8 bits per byte)
+    - num_subs: number of substitutions (given the error rate)
+    - num_dels: number of deletions (given the error rate)
+    - num_ins: number of insertions (given the error rate)
+    - num_errors: total number of errors (sum of subs, dels, ins)
+    - code: name of the code
+    - information_bytes: number of bytes in the original file
+    - create a global variable base_err_ratio which is the ratio of errors to bases (num_errors/encoded_bases)
+    - then modify the sequences using modify_seqs()
+    - finally, call the decoder function and store the results in res
+    - return the results
+
     """
     results = []
     # open a file and read to variable
@@ -154,6 +178,7 @@ def encode_mutate_decode(file, encoder_function, decoder_function, code_name, nu
         res["code"] = code_name
         res["information_bytes"] = os.path.getsize(file)
 
+        # why is it done twice ?
         res["encoded_bases"] = len(encoded_seq[0].strip()) * len(
             encoded_seq)
         res["encoded_bytes"] = (res["encoded_bases"] * 2 / 8)
@@ -204,7 +229,7 @@ def deletions(original, pos):
 
 
 def encode_dna_aeon(file):
-    py_command = ("python3 " + DNA_AEON_PATH + "/encode.py -c " + CONFIG)
+    py_command = ("python3 " + DNA_AEON_PATH + "/python/encode.py -c " + CONFIG)
     
     process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
@@ -229,7 +254,7 @@ def decode_dna_aeon(sequences, validation_data):
 
 
     filename = INPUT_DATA.split("/")[-1]
-    py_command = ("python3 " + DNA_AEON_PATH + "/decode.py -c " + CONFIG)
+    py_command = ("python3 " + DNA_AEON_PATH + "/python/decode.py -c " + CONFIG)
     process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     
@@ -266,7 +291,13 @@ def decode_dna_aeon(sequences, validation_data):
     return badbytes == 0
 
 if __name__ == '__main__':
-    #setup the paths
+    """
+    Main function to run the error simulation
+    for i in [0.1]: run once
+    of an np.array([0.0238, 0.0082, 0.0039]) error rate
+    calls encode_mutate_decode with the DNA-Aeon encoder and decoder
+    at the end, save the results to a csv file (with _s, _i, _d for subs, ins, dels respectively)
+    """
     if len(sys.argv) < 2:
         print("Please provide the file name (with extension) as an argument")
         exit(1)
@@ -275,12 +306,11 @@ if __name__ == '__main__':
         print("Please provide the path to the DNA-Aeon directory")
         exit(1)
     NOREC4DNA_BASE_PATH = DNA_AEON_PATH + "/libraries/NOREC4DNA"
-    INPUT_DATA = DNA_AEON_PATH + "/data"
-    FILENAME = DNA_AEON_PATH + "/data/" + sys.argv[1]
-    CONFIG = DNA_AEON_PATH + "/configs" + "/config.json"
-    ENCODED_FILE = DNA_AEON_PATH + "/data" + "/encoded.fasta"
+    FILENAME = sys.argv[1]
+    INPUT_DATA = DNA_AEON_PATH + "/data/" + FILENAME
+    CONFIG = DNA_AEON_PATH + "/configs/config-files" + "/config.json"
+    ENCODED_FILE = DNA_AEON_PATH + "/data/" + "encoded.fasta"
 
-    exit(0)
     for i in [0.1]:
         (srate, drate, irate) = i * np.array([0.0238, 0.0082, 0.0039])
         print("multiplier: " + str(i))
@@ -290,7 +320,8 @@ if __name__ == '__main__':
         if os.path.exists(DNA_AEON_PATH + "/data/results/" + FILENAME):
             os.remove(DNA_AEON_PATH + "/data/results/" + FILENAME)
         res_list = encode_mutate_decode(INPUT_DATA, encode_dna_aeon,
-                                        decode_dna_aeon, code_name, num_errors, repeat=100,
+                                        decode_dna_aeon, code_name, num_errors, repeat=1,
                                         pre_encoded=False)
         results = pd.DataFrame(res_list)
-        results.to_csv(code_name + "_s" + str(res_list[0]["num_subs"]) + "_i" + str(res_list[0]["num_ins"]) + "_d" + str(res_list[0]["num_dels"]) + ".csv")
+        # I want the csv written to data/results folder
+        results.to_csv(DNA_AEON_PATH + "/data/results/" + FILENAME + "_s" + str(res_list[0]["num_subs"]) + "_i" + str(res_list[0]["num_ins"]) + "_d" + str(res_list[0]["num_dels"]) + ".csv")

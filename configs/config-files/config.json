@@ -39,8 +39,8 @@
   "general": {
     "as_fasta": true,
     "codebook": {
-      "motifs": "./codewords/cw_40_60_hp3.json",
-      "words": "./codewords/cw_40_60_hp3.fasta"
+      "motifs": "./configs/codewords/cw_40_60_hp3.json",
+      "words": "./configs/codewords/cw_40_60_hp3.fasta"
     },
     "sync": 2,
     "threads": 4,

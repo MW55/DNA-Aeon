@@ -205,6 +205,18 @@ All output files will be written to "/data/results".
 
 ## Using the error simulation script
 To simulate errors, the paths at the top of the *error_simulation.py* script have to be adjusted. in the main part of the script, the amount of errors and the amount of repetitions can also be adjusted. Please keep in mind, that the resulting file can be found under data/mut_encoded.fasta. In the config file, the input for the decoding has to be adjusted accordingly to run encode-mutate-decode cycles.
+### Update docs
+the documents structure as been modify, so that every path can be reconstructed from DNA-AEON main folder
+
+```shell 
+$ python3 error_simulation.py "filename"
+```
+
+- the NOREC4DNA has to be in the libraries/folder
+- encode.py and decode.py has to be in the python folder
+- the file has to be in the data folder
+- outputs will be written to data/results folder (a .csv)
+- config has to be in the configs/config-files folder, with default name of config.json 
 
 ## Reproducing the in-vitro analysis
 To evaluate DNA-Aeon, we encoded the files *Dorn* *el.jpg* and *mosla.png* that can be found in the *examples/* folder. The encoded files were subsequently sythesized, amplified and sequenced. The json files in the *examples/* folder can be used to reproduce both the encoding and the decoding of the files. 

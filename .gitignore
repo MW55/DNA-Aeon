@@ -177,3 +177,4 @@ configs/data/decoded.txt/*
 libraries/*
 libraries/*/*/*
 libraries/*/*
+data/results/*.csv

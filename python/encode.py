@@ -53,7 +53,7 @@ def encode_ac(current_path, config):
     :return:
     """
     filename = config["encode"]["input"].split("/")[-1]
-    config["encode"]["input"] = "{cpath}/configs/data/{filename}_RU10.zip".format(cpath=current_path, filename=filename)
+    config["encode"]["input"] = "{cpath}/data/{filename}_RU10.zip".format(cpath=current_path, filename=filename)
     with open("intermediate_config.json", "w") as inter:
         json.dump(config, inter)
     # Inner encoder command
@@ -74,7 +74,7 @@ if __name__ == "__main__":
                         help='path to the config file.', required=True)
     args = parser.parse_args()
 
-    cpath = pathlib.Path(__file__).parent.resolve()
+    cpath = pathlib.Path(__file__).parent.parent.resolve()
     with open(args.conf, "r") as conf_inp:
         config_data = json.load(conf_inp)
 

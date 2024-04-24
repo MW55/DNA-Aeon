@@ -57,7 +57,7 @@ if __name__ == "__main__":
     parser.add_argument('--mode', '-m', dest='mode', type=str, action='store',
                         help='mode of output. "subprocess", "sys", "file"', required=False, default="subprocess")
     args = parser.parse_args()
-    cpath = pathlib.Path(__file__).parent.resolve()
+    cpath = pathlib.Path(__file__).parent.parent.resolve()
     conf_path = pathlib.Path(args.conf).resolve()
     with open(args.conf, "r") as conf_inp:
         config_data = json.load(conf_inp)
