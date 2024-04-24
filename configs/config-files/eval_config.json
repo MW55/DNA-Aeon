@@ -1,11 +1,1 @@
-{
-    "general": {
-        "sync": 4,
-        "as_fasta": true
-        },
-    "decode": {
-        "input": "/Users/mguyot/Documents/DNA-Aeon/data/dorn_encoded_mod.fasta",
-        "output": "dorn_decoded_auto.zip",
-        "length": 172
-    }
-}
+{"general": {"sync": 4, "as_fasta": true}, "decode": {"input": "/Users/mguyot/Documents/DNA-Aeon/data/dorn_encoded_mod.fasta", "output": "Dorn.zip", "length": 172}}

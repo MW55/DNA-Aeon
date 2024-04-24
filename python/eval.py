@@ -1,4 +1,5 @@
 
+import pathlib
 
 import numpy as np
 import subprocess
@@ -7,7 +8,7 @@ from copy import deepcopy
 import os
 import shutil
 import filecmp
-import yaml
+#import yaml
 from time import time
 import json
 
@@ -15,11 +16,14 @@ import json
 def run_eval(ac_path, norec_path, ini_name, out_path, orig_path, out_zip_name, length, norec_out_path, conf_file_path):
     subprocess.call([ac_path, '-d', conf_file_path])
     print(out_zip_name)
-    shutil.copy(out_zip_name, norec_path + '/' + out_zip_name)
-    try:
-        subprocess.call([norec_path + '/venv/bin/python', norec_path + '/ConfigWorker.py', norec_path + "/" + ini_name])
-        return filecmp.cmp(orig_path, norec_out_path)
-    except:
+    if(os.path.exists(out_zip_name)) :
+        shutil.copy(out_zip_name, norec_path + '/' + out_zip_name)
+        try:
+            subprocess.call([norec_path + '/venv/bin/python', norec_path + '/ConfigWorker.py', norec_path + "/" + ini_name])
+            return filecmp.cmp(orig_path, norec_out_path)
+        except:
+            return False
+    else:
         return False
 
 
@@ -54,14 +58,17 @@ if __name__ == '__main__':
     11) results: the results of the evaluation
     
     """
-    out_path = "/Users/mguyot/Documents/DNA-Aeon/data/dorn_encoded_mod.fasta"
-    ac_path = "/Users/mguyot/Documents/DNA-Aeon/arithmetic_modulator_error_correction"
-    norec_path = "/Users/mguyot/Documents/DNA-Aeon/NOREC4DNA"
+    project_path = str(pathlib.Path(__file__).parent.parent.resolve())
+    out_path = project_path + "/data/dorn_encoded_mod.fasta"
+    ac_path = project_path + "/bin/arithmetic_modulator_error_correction"
+    norec_path = project_path + "/libraries/NOREC4DNA"
     ini_name = "Dorn.ini"
-    orig_path = "/Users/mguyot/Documents/DNA-Aeon/arithmetic_modulator_error_correction/data/Dorn"
-    norec_out_path = "/Users/mguyot/Documents/DNA-Aeon/arithmetic_modulator_error_correction/Dorn"
-    out_zip_name = "dorn_decoded_auto.zip"
-    conf_file_path = "/Users/mguyot/Documents/DNA-Aeon/eval_config.json"
+    #orig_path = project_path + "/arithmetic_modulator_error_correction/data/Dorn"
+    orig_path = project_path + "/data/Dorn"
+    norec_out_path = project_path + "/data/results/eval/Dorn"
+    #out_zip_name = "dorn_decoded_auto.zip" #what is this?
+    out_zip_name = "Dorn.zip"
+    conf_file_path = project_path + "/configs/config-files/eval_config.json"
     length = 172
     iterations = 1
     results = dict()
