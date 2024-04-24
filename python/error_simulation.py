@@ -1,3 +1,9 @@
+## This script is used to simulate errors in the encoded data and then decode it using DNA-Aeon
+# @Todo: Remove the constants and make them as arguments to the function
+#
+
+import pathlib
+
 import math
 import os
 import sys
@@ -15,13 +21,19 @@ import shutil
 import warnings
 warnings.filterwarnings("ignore")
 
-NOREC4DNA_BASE_PATH = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon/NOREC4DNA"
-DNA_AEON_PATH = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon"
-INPUT_DATA = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon/data/D"
-FILENAME = "D"
-CONFIG = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon/config.json"
-ENCODED_FILE = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon/data/encoded.fasta"
+#NOREC4DNA_BASE_PATH = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon/NOREC4DNA"
+#DNA_AEON_PATH = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon"
+#INPUT_DATA = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon/data/D"
+#FILENAME = "D"
+#CONFIG = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon/config.json"
+#ENCODED_FILE = "/home/wintermute/projects/dna_aeon_review_clean/DNA-Aeon/data/encoded.fasta"
 
+NOREC4DNA_BASE_PATH = ""
+DNA_AEON_PATH = ""
+INPUT_DATA = ""
+FILENAME = ""
+CONFIG = ""
+ENCODED_FILE = ""
 
 def modify_seq(original, pos_sub, pos_ins, pos_del):
     modified = deepcopy(original)
@@ -254,6 +266,18 @@ def decode_dna_aeon(sequences, validation_data):
     return badbytes == 0
 
 if __name__ == '__main__':
+    #setup the paths
+    if len(sys.argv) < 2:
+        print("Please provide the file name (with extension) as an argument")
+        exit(1)
+    DNA_AEON_PATH = str(pathlib.Path(__file__).parent.parent.resolve())
+    NOREC4DNA_BASE_PATH = DNA_AEON_PATH + "/libraries/NOREC4DNA"
+    INPUT_DATA = DNA_AEON_PATH + "/data"
+    FILENAME = DNA_AEON_PATH + "/data/" + sys.argv[1]
+    CONFIG = DNA_AEON_PATH + "/configs" + "/config.json"
+    ENCODED_FILE = DNA_AEON_PATH + "/data" + "/encoded.fasta"
+
+    exit(0)
     for i in [0.1]:
         (srate, drate, irate) = i * np.array([0.0238, 0.0082, 0.0039])
         print("multiplier: " + str(i))
