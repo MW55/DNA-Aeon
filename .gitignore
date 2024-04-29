@@ -180,3 +180,5 @@ libraries/*/*
 data/results/*.csv
 Dorn.zip
 data/Dorn copy.zip
+data/results/decoded.txt/*
+data/results/decoded.txt
