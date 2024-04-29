@@ -3,6 +3,7 @@ import argparse
 import pathlib
 import json
 import os
+import sys
 
 def header_crc_mapper(header_crc_conf_entry, header_bool):
     #if not header_bool and header_crc_conf_entry:
@@ -15,7 +16,7 @@ def header_crc_mapper(header_crc_conf_entry, header_bool):
         raise ValueError("Allowed choices for the header crc length are 0 bits, 8 bits, 16 bits or 32 bits. Aborting")
         exit(1)
 
-def encode_norec_for_ac(config_data, current_path):
+def encode_norec_for_ac(config_data, current_path, mode="subprocess"):
     """
     outer encoder for the fountaincode-arithmetic code concatenation.
     :param file:
@@ -29,14 +30,26 @@ def encode_norec_for_ac(config_data, current_path):
     header_crc_str = "" if not header_crc_mapper(config_data["NOREC4DNA"]["header_crc_length"], config_data["NOREC4DNA"]["insert_header"]) else " --header_crc_str " + header_crc_mapper(config_data["NOREC4DNA"]["header_crc_length"], config_data["NOREC4DNA"]["insert_header"]) + "" 
     filename = input_file.split("/")[-1]
     py_command = ("{cpath}/libraries/NOREC4DNA/venv/bin/python3 {cpath}/libraries/NOREC4DNA/demo_raptor_encode.py --chunk_size {chunk_size_str} --error_correction {err_det} --save_as_zip {file}{ins_header}{crc_str} --overhead {redundancy}".format(
-        cpath=current_path, chunk_size_str=str(chunk_size), file=input_file, redundancy=packet_redundancy, ins_header=header, err_det=error_detection, crc_str=header_crc_str))
-    process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
+        cpath=current_path, 
+        chunk_size_str=str(chunk_size),
+        file=input_file,
+        redundancy=packet_redundancy,
+        ins_header=header,
+        err_det=error_detection,
+        crc_str=header_crc_str))
+    if (mode == "subprocess"):  
+        process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
+    elif (mode == "sys"):
+        process = subprocess.Popen(py_command.split(), stdout=sys.stdout, stderr=sys.stderr)
+    else:
+        print("Invalid mode. Exiting...")
+        exit(1)
     output, error = process.communicate()
-    norec_config = output.split()[-16].decode() # hardcoded
+    norec_config = output.split()[-1].decode() # hardcoded
     #norec_config = output.split()[-1].decode() # this give an error is the number of Chunks is not big enough
     # print("\n" + NOREC4DNA_BASE_PATH + "/" + filename + ".ini\n")
     # os.rename(config, NOREC4DNA_BASE_PATH + "/" + filename + ".ini")
-    with open(norec_config, "r") as c_:
+    with open(norec_config, "r", encoding="utf-8") as c_:
         line_list = c_.readlines()
         line_list[0] = "[{cpath}/configs/data/{fname}_RU10.zip]\n".format(cpath=current_path, fname=filename) #"[../data/" + filename + "_RU10.zip]\n"
         if config_data["NOREC4DNA"]["header_crc_length"] == 0:
@@ -47,7 +60,7 @@ def encode_norec_for_ac(config_data, current_path):
     return
 
 
-def encode_ac(current_path, config):
+def encode_ac(current_path, config, mode="subprocess"):
     """
     encode the sequences using the fountaincode-arithmetic code concatenation.
     :param file:
@@ -60,7 +73,10 @@ def encode_ac(current_path, config):
     # Inner encoder command
     py_command = ("{cpath}/bin/arithmetic_modulator_error_correction -e {cpath}/{config_file}".format(
         cpath=current_path, config_file="intermediate_config.json"))
-    process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
+    if (mode == "subprocess"):
+        process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
+    elif (mode == "sys"):
+        process = subprocess.Popen(py_command.split(), stdout=sys.stdout, stderr=sys.stderr)
     output, error = process.communicate()
     os.remove("intermediate_config.json")
     if not config["encode"]["keep_intermediary"]:
@@ -73,6 +89,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Encode data in DNA using the concatenation of the NOREC4DNA raptor-fountain implementation and DNA-Aeon.')
     parser.add_argument('--config', '-c', dest='conf', type=str, action='store',
                         help='path to the config file.', required=True)
+    parser.add_argument('--mode', '-m', dest='mode', type=str, action='store',
+                        help='mode of output. "subprocess", "sys", "file"', required=False, default="subprocess")
     args = parser.parse_args()
 
     cpath = pathlib.Path(__file__).parent.parent.resolve()
@@ -80,10 +98,12 @@ if __name__ == "__main__":
         config_data = json.load(conf_inp)
 
     # Start outer encoder
-    encode_norec_for_ac(config_data, cpath)
+    print("Starting outer encoder")
+    encode_norec_for_ac(config_data, cpath, args.mode)
     print("\n\nFinished outer encoding, starting inner encoder...\n")
     # Start inner encoder
-    encode_ac(cpath, config_data)
+    print("Starting inner encoder")
+    encode_ac(cpath, config_data, args.mode)
     file_ext = "" if config_data["general"]["as_fasta"] else ".zip"
     output_path = pathlib.Path(config_data["encode"]["output"] + file_ext).resolve()
     print("Finished encoding! data can be found at {output_path}".format(output_path=output_path))
