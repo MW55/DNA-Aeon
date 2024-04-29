@@ -182,3 +182,7 @@ Dorn.zip
 data/Dorn copy.zip
 data/results/decoded.txt/*
 data/results/decoded.txt
+configs/config-files/config copy 2.json
+configs/config-files/config_encode_img.json
+configs/config-files/el.json
+configs/examples/el.jpg_Thu_Feb_24_09_58_39_2022.ini
