@@ -32,7 +32,8 @@ def encode_norec_for_ac(config_data, current_path):
         cpath=current_path, chunk_size_str=str(chunk_size), file=input_file, redundancy=packet_redundancy, ins_header=header, err_det=error_detection, crc_str=header_crc_str))
     process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
-    norec_config = output.split()[-1].decode()
+    norec_config = output.split()[-16].decode() # hardcoded
+    #norec_config = output.split()[-1].decode() # this give an error is the number of Chunks is not big enough
     # print("\n" + NOREC4DNA_BASE_PATH + "/" + filename + ".ini\n")
     # os.rename(config, NOREC4DNA_BASE_PATH + "/" + filename + ".ini")
     with open(norec_config, "r") as c_:
