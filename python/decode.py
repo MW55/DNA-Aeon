@@ -10,9 +10,10 @@ import sys
 # 1) solution use sys.stdout and sys.stderr as arguments for subprocess.Popen
 # @todo: I want a to print the output of the C++ program to a file.
 
+
 def decode_ac(current_path, config_path, mode="subprocess"):
-    py_command = ("{cpath}/bin/arithmetic_modulator_error_correction -d {conf_path}".format(cpath=current_path,
-                                                                                           conf_path=config_path))
+    
+    py_command = ("{cpath}/bin/arithmetic_modulator_error_correction -d {conf_path}".format(cpath=current_path,                                                                                       conf_path=config_path))
     if (mode == "subprocess"):
         process = subprocess.Popen(py_command.split(), stdout=subprocess.PIPE)
     elif (mode == "sys"):
@@ -61,24 +62,33 @@ def decode_norec_for_ac(current_path, config_data, mode="subprocess"):
 # main should have an extra argument to specify the mode of the decode process "subprocess", "sys", "file"
 # main should have an extra argument to specify debug mode of the encode process
 if __name__ == "__main__":
+    if __debug__: print("Debug mode is on. Asserts will be checked.")
+    else: print("Debug mode is off. Asserts will not be checked.")
     parser = argparse.ArgumentParser(description='Decode data that was encoded in DNA using the concatenation of the NOREC4DNA raptor-fountain implementation and DNA-Aeon.')
     parser.add_argument('--config', '-c', dest='conf', type=str, action='store',
                         help='path to the config file.', required=True)
     parser.add_argument('--mode', '-m', dest='mode', type=str, action='store',
                         help='mode of output. "subprocess", "sys", "file"', required=False, default="subprocess")
+    parser.add_argument('--skipinner', '-i', dest='skipinner', action='store_true', required=False, default=False)
+    parser.add_argument('--skipouter, -o', dest='skipouter', action='store_true', required=False, default=False)
     args = parser.parse_args()
     cpath = pathlib.Path(__file__).parent.parent.resolve()
     conf_path = pathlib.Path(args.conf).resolve()
     with open(args.conf, "r") as conf_inp:
         config_data = json.load(conf_inp)
-    print("Starting inner decoder.")
-    # Start inner decode
-    decode_ac(cpath, conf_path) #args.mode)
-    print("\nFinished inner decoding, starting outer decoder...\n")
-    # Start outer decode
-    decode_norec_for_ac(cpath, config_data, args.mode)
-    print("\nFinished outer decoding. File can be found at {cur_path}/data/results/{inp_file}".format(
+    if not args.skipinner:
+        print("Starting inner decoder.")
+        decode_ac(cpath, conf_path) #args.mode)
+        print("\nFinished inner decoding...\n")
+    else:
+        print("Skipping inner decoding with (-s). Starting outer decoding...\n")
+    if not args.skipouter:
+        print("Starting outer decoding.\n")
+        decode_norec_for_ac(cpath, config_data, args.mode)
+        print("\nFinished outer decoding. File can be found at {cur_path}/data/results/{inp_file}".format(
         cur_path=cpath, inp_file=config_data["encode"]["input"].split("/")[-1]))
+    else:
+        print("Skipping outer decoding with (-o). Exiting...")
     '''
     file_ext = "" if config_data["general"]["as_fasta"] else ".zip"
     output_path = pathlib.Path(config_data["encode"]["output"] + file_ext).resolve()
