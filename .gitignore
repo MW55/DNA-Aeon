@@ -186,3 +186,9 @@ configs/config-files/config copy 2.json
 configs/config-files/config_encode_img.json
 configs/config-files/el.json
 configs/examples/el.jpg_Thu_Feb_24_09_58_39_2022.ini
+data/el.jpg_Thu_Feb_24_09_58_39_2022.ini
+data/encoded_el.fasta
+data/mut_encoded.fasta
+data/tmp/00005_560x888_94.jxl_Mon_Apr_29_10_42_30_2024.ini
+data/tmp/decoded.txt.zip
+data/tmp/decoded2.txt.zip
