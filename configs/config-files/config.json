@@ -29,7 +29,7 @@
     }
   },
   "encode": {
-    "input": "data/D",
+    "input": "data/00005_560x888_69.jxl",
     "keep_intermediary": false,
     "min_length": 0,
     "output": "data/encoded.fasta",
@@ -50,7 +50,7 @@
     }
   },
   "NOREC4DNA": {
-    "chunk_size": 14,
+    "chunk_size": 3884,
     "package_redundancy": 0.4,
     "insert_header":true,
     "header_crc_length": 8,
