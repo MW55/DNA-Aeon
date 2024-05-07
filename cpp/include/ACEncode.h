@@ -34,6 +34,8 @@ public:
     int readCBEOF(BitInStream &input);
 };
 
+
+// you need T to have the put method implemented (using concepts would be better?)
 template<typename T>
 void inflating(FreqTable &freqs, BitInStream &bitin, T &out, int minLen = 0) {
     Inflate inf(16, bitin);

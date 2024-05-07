@@ -103,6 +103,17 @@ bool BitOutStream::zeroByteEnd(){
     }
 }
 
+/**
+ * @brief this function is
+ * 1) we set done to true when finish() is called
+ * 2) we check the sync and if it's not 0 and done is true
+ * 3) we add the remaining bits to the crcBuffer 
+ * 4) then is not empty
+ * 
+ * 5) we call insert on out.data vector (so it copies the crcBuffer to the end of the out.data vector)
+ * 6)
+ */
+
 void BitOutStream::endStream(){
     if (sync != 0 && done) {
         for (const auto &item: wBuffer) {

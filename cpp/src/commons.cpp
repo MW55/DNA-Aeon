@@ -9,6 +9,7 @@
 #include "absl/container/flat_hash_map.h"
 #include "single_include/nlohmann/json.hpp"
 #include "single_include/robin_hood.h"
+#include "debug_log.h"
 
 using namespace std;
 
@@ -69,6 +70,7 @@ void write_to_zip(string outputFile, bool add_index, bool most_common_only, bool
     }
     outarch.Save();
     outarch.Close();
+    DEBUG("Wrote to zip file: " << outputFile);
 }
 
 robin_hood::unordered_map<string, vector<string>> readConcScheme(const string &concScheme) {

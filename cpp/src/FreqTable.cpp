@@ -9,9 +9,7 @@ using namespace std;
 FreqTable::FreqTable(string2stringVec& motif, string seq,
                      int start, bool normalized, int codewordLen,
                      robin_hood::unordered_map<string, char2double>& pDict):
-                     ProbabilityEval(seq, motif, start, normalized,
-                                     codewordLen, &pDict),
-
+    ProbabilityEval(seq, motif, start, normalized, codewordLen, &pDict),
     wordEnd(0),
     start(start),
     codewordLen(codewordLen)

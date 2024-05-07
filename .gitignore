@@ -192,3 +192,8 @@ data/mut_encoded.fasta
 data/tmp/00005_560x888_94.jxl_Mon_Apr_29_10_42_30_2024.ini
 data/tmp/decoded.txt.zip
 data/tmp/decoded2.txt.zip
+data/intermediates_results/el.jpg_RU10.zip
+data/intermediates_results/*.zip
+data/intermediates_results/*
+data/tmp/encoded.fasta
+data/tmp/encoded.ini

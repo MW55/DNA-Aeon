@@ -51,6 +51,16 @@ void ECdecoding::write(char symbol) {
     outp += symbol;
 }
 
+/**
+ * @brief this function returns the default value of the basicString at the index position
+ * if the index is bigger than the size of the basicString, it returns 'N'
+ * else it returns the value of the basicString at the index position
+ * 
+ * @param basicString 
+ * @param index 
+ * @return char 
+ */
+
 char ECdecoding::defaultReturn(string &basicString, uint32_t index) {
     if ((unsigned long) index >= basicString.size())
         return 'N';
@@ -80,6 +90,15 @@ void ECdecoding::metricProbs(SeqEntry &sequence, array<double, 2> &fanoMetrics,
 }
 
 
+/**
+ * @brief this function
+ * 
+ * @param sequence 
+ * @param hit 
+ * @param nextProbs 
+ * @param base 
+ * @param increNum 
+ */
 
 void ECdecoding::updateState(SeqEntry &sequence,
                              bool hit, char2double &nextProbs, char base, int increNum) {
@@ -119,7 +138,40 @@ void ECdecoding::updateState(SeqEntry &sequence,
     }
 }
 
-
+/**
+ * @brief checkpointCheck is called 
+ * in updateState if the bitout failed sync 
+ * 
+ * the function is called with the sequence object
+ * we check sequence.seq (which is a string)
+ * we check if the crcCheckpoints from ECdecoding contains the sequence.lastCrc (matching key of hashmap)
+ * if the key exists, we get the value of the key
+ *      if the first element of the value is bigger than the threshold (crcCheckpoints is a <string, pair<int, SeqEntry>> hashmap)
+ *          we set the current sequence to the value of the key
+ *      else we increment the first element of the value 
+ * else
+ *    we break the loop
+ */
+void ECdecoding::checkpointCheck(const SeqEntry &sequence)
+{
+    SeqEntry currentSequence = sequence;
+    while (!currentSequence.seq.empty()) {
+        if (crcCheckpoints.contains(currentSequence.lastCrc)) {
+            auto &checkpoint = crcCheckpoints.at(currentSequence.lastCrc);
+            if (checkpoint.first > config["decode"]["threshold"]["checkpoint"]) {
+                currentSequence = checkpoint.second;
+                // Optionally, consider whether you should erase the CRC entry:
+                // crcCheckpoints.erase(currentSequence.lastCrc);
+            } else {
+                checkpoint.first++;
+                break; // Exit loop since no further recursion is needed
+            }
+        } else {
+            break; // No further processing needed
+        }
+    }
+}
+#if 0
 void ECdecoding::checkpointCheck(const SeqEntry &sequence) {
     // the threshold is more or less arbitrary, this can be adjusted.
     // potential problem: if the metric of the last checkpoint is too high,
@@ -139,6 +191,7 @@ void ECdecoding::checkpointCheck(const SeqEntry &sequence) {
         }
     }
 }
+#endif
 
 /**
  * @brief 
@@ -196,6 +249,12 @@ void ECdecoding::checkIns(SeqEntry &sequence, char base, char2double &nextProbs)
         updateState(newSeqIns, false, nextProbs, base, 2);
     }
 }
+
+/**
+ * @brief this function inserts a unique pointer to a SeqEntry object in the queue
+ * 
+ * @param sequence 
+ */
 
 void ECdecoding::queueInsert(SeqEntry &sequence) {
     queue.insert(std::make_unique<SeqEntry>(sequence));
@@ -318,7 +377,7 @@ SeqEntry ECdecoding::decode(int codewordLen,
     //array<int, 2> e_rate = {config["decode"]["metric"]["fano"]["rate"]["low"],config["decode"]["metric"]["fano"]["rate"]["high"]};
     array<double, 2> fanoMetrics = getFanos(errorProb, e_rate);
     //DEBUG("Fano metrics: " << fanoMetrics[0] << " " << fanoMetrics[1]);
-    string s;
+    std::string s;
     ProbabilityEval currSeq = ProbabilityEval(s, motif, 0, true, codewordLen, &probMap);
     char2double nextProbs = currSeq.nextProbsSingleLetter();
     DecodedData dec = DecodedData();
@@ -329,6 +388,7 @@ SeqEntry ECdecoding::decode(int codewordLen,
     SeqEntry baseLine = sequence;
     crcCheckpoints.emplace(baseLine.seq, std::pair(0, baseLine));
     metricProbs(sequence, fanoMetrics, nextProbs, bases);
+    DEBUG("Starting main loop.");
     try {
         mainLoop(fanoMetrics, bases, itCount);
     } catch (const logic_error &e) {
@@ -337,6 +397,7 @@ SeqEntry ECdecoding::decode(int codewordLen,
         res.metric = 1000;
         return res;
     }
+    DEBUG("Finished main loop.");
     SUCCESS("Finished first run, checking CRC...");
     auto itr = queue.begin();
     SeqEntry res = **itr;
@@ -379,13 +440,17 @@ SeqEntry ECdecoding::decode(int codewordLen,
 
 void ECdecoding::mainLoop(array<double, 2> &fanoMetrics, array<char, 4> &bases, int itCount) {
     // Stopping when the best candidate has the desired length is suboptimal.
+    int iter = 0;
     while ((**queue.begin()).seq.size() != messageLen) {
+        //std::cout << "Iteration: " << iter++ << std::endl;
         queueCheck(fanoMetrics, bases);
         itCount++;
         if (queue.empty()) {
             throw out_of_range("Queue is empty.");
         }
     }
+    std::cout << "Iterations: " << itCount << std::endl;
+    std::cout << "mainLoop done" << std::endl;
 }
 
 /**
@@ -444,19 +509,26 @@ void do_decode(const string &inp,
     string metric_str = "ERR";
     vector<unsigned char> data = {};
     try {
+        DEBUG("try block");
         ECdecoding ecDec = ECdecoding(inp, freqs, tMap, true, config);
+        DEBUG("ECdecoding object created");
         SeqEntry dec = ecDec.decode(codewordLen, motif, config, e_rate);
+        DEBUG("decode done");
         metric_str = to_string(dec.metric);
         data = *dec.ac.bitout.get_data();
+        DEBUG("try block done");
     }
     catch (...) {
-        WARN("No candidate found.");
+        //WARN("No candidate found.");
+        DEBUG("No candidate found.");
     }
     {
         //we emplace back even if data is empty ?
         //std::unique_lock<std::mutex> uLock(*res_lock);
         std::scoped_lock lock(*res_lock); //C++17
+        DEBUG("emplace_back data");
         results.emplace_back(metric_str, data); //shouldn't I use std::move of std::tuple<string, vector<unsigned char>> ?
         //results.emplace_back(std::move(std::make_tuple(metric_str, data))); ?
+        //std::cerr << "Do_Decode" << std::endl;
     }
 }

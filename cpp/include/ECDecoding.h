@@ -69,7 +69,6 @@ private:
     int queueCounter;
     nlohmann::json config;
 
-
     void checkpointCheck(const SeqEntry &sequence);
 
     static double codewordFunc(double probs);

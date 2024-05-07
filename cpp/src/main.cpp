@@ -119,8 +119,7 @@ nlohmann::json parseValidateConfig(string configPath, bool encode) {
             //runs default 5
             config[nlohmann::json::json_pointer("/decode/queue/runs")] = config.value<int>(nlohmann::json::json_pointer("/decode/queue/runs"), 5);
             //reduce default 0.5
-            config[nlohmann::json::json_pointer("/decode/queue/reduce")] = config.value<double>(nlohmann::json::json_pointer("/decode/queue/reduce"), 0.5);
-            
+            config[nlohmann::json::json_pointer("/decode/queue/reduce")] = config.value<double>(nlohmann::json::json_pointer("/decode/queue/reduce"), 0.5);   
         }
     } catch (nlohmann::json::exception &err){
         cerr << err.what() << endl;
@@ -191,12 +190,13 @@ int main(int argc, char *argv[]) {
         if (static_cast<string>((std::string)config["encode"]["input"]).ends_with(".zip")) {
             encode_zip(config, freqs, config["encode"]["min_length"], config["encode"]["same_length"], configPath);
         } else {
+            DEBUG("Encoding file (not zip)");
             ifstream inStream((std::string)config["encode"]["input"], ios::binary);
             assert(inStream.good());
-            BitInStream bin(inStream, config["general"]["sync"]);
+            BitInStream bin(inStream, config["general"]["sync"]); //sync =2 for now
             ofstream out((std::string)config["encode"]["output"], ios::binary);
-            inflating(freqs, bin, out, config["encode"]["min_length"]);
-            if(config["encode"]["update_config"]){
+            inflating(freqs, bin, out, config["encode"]["min_length"]); //min_length = 0 for now
+            if(config["encode"]["update_config"]){ //true in config.json
                 out.flush();
                 out.close();
                 ifstream outin((std::string)config["encode"]["output"]);
@@ -219,11 +219,13 @@ int main(int argc, char *argv[]) {
             Zippy::ZipArchive inarch(static_cast<string>(config["decode"]["input"]));
             std::vector<std::string> ents = inarch.GetEntryNames();
             absl::synchronization_internal::ThreadPool pool(config["general"]["threads"]);
+            //auto& done = pool.getCompletionFuture();
             std::vector<std::string> inpts;
             for (auto &ent: ents) {
                 inpts.push_back(inarch.GetEntry(ent).GetDataAsString());
             }
             for (auto &inp: inpts) {
+                //use lambda rather than std::bind
                 pool.Schedule(std::bind(do_decode,
                                 std::ref(inp), 
                                 std::ref(freqs), 
@@ -238,6 +240,7 @@ int main(int argc, char *argv[]) {
             while (results.size() != ents.size()) {
                 this_thread::sleep_for(chrono::milliseconds(500));
             }
+            //done.wait();
             {
                 //std::unique_lock<std::mutex> uLock(*res_lock);
                 std::scoped_lock lock(*res_lock);
@@ -270,8 +273,10 @@ int main(int argc, char *argv[]) {
                 this_thread::sleep_for(chrono::milliseconds(1000));
             }
             {
+                DEBUG("Writing to zip");
                 std::unique_lock<std::mutex> uLock(*res_lock);
                 write_to_zip(config["decode"]["output"], true, static_cast<bool>(config["general"]["zip"]["most_common_only"]), static_cast<bool>(config["general"]["zip"]["decodable_only"]),results);
+
             }
         } else {
             DEBUG("Decoding file");
