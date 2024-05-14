@@ -13,7 +13,7 @@ def create_norec_env(current_path):
 
 def install_norec_packages(current_path):
     run(["venv/bin/pip", "install", "wheel"], cwd="{cpath}/libraries/NOREC4DNA".format(cpath=current_path))
-    run(["venv/bin/pip", "install", "-r", abspath("./python/NOREC_requirements.txt")], cwd="{cpath}/libraries/NOREC4DNA".format(cpath=current_path)) #"./NOREC_requirements.txt"
+    run(["venv/bin/pip", "install", "-r",("{cpath}/python/NOREC_requirements.txt").format(cpath=current_path)], cwd="{cpath}/libraries/NOREC4DNA".format(cpath=current_path)) #"./NOREC_requirements.txt"
 
 #before running cmake you should move to the build directory
 def compile_dna_aeon(current_path, debug_mode):
