@@ -1,12 +1,12 @@
 [submodule "Zippy"]
-	path = ./libraries/Zippy
+	path = libraries/Zippy
 	url = https://github.com/troldal/Zippy.git
 [submodule "abseil-cpp"]
-	path = ./libraries/abseil-cpp
+	path = libraries/abseil-cpp
 	url = https://github.com/abseil/abseil-cpp.git
 [submodule "ConstrainedKaos"]
-	path = ./libraries/ConstrainedKaos
+	path = libraries/ConstrainedKaos
 	url = https://github.com/HFLoechel/ConstrainedKaos.git
 [submodule "NOREC4DNA"]
-	path = ./libraries/NOREC4DNA
+	path = libraries/NOREC4DNA
 	url = https://github.com/umr-ds/NOREC4DNA.git
