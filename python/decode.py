@@ -78,12 +78,14 @@ if __name__ == "__main__":
         config_data = json.load(conf_inp)
     if not args.skipinner:
         print("Starting inner decoder.")
-        decode_ac(cpath, conf_path) #args.mode)
+        #args mode has been removed (observe if bug occurs)
+        decode_ac(cpath, conf_path, args.mode)
         print("\nFinished inner decoding...\n")
     else:
         print("Skipping inner decoding with (-s). Starting outer decoding...\n")
     if not args.skipouter:
         print("Starting outer decoding.\n")
+        #args mode has been removed (observe if bug occurs)
         decode_norec_for_ac(cpath, config_data, args.mode)
         print("\nFinished outer decoding. File can be found at {cur_path}/data/results/{inp_file}".format(
         cur_path=cpath, inp_file=config_data["encode"]["input"].split("/")[-1]))

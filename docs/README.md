@@ -130,3 +130,7 @@ result.emplace_back(metric_str, data) // a tuple
 
 ---
 
+# 08052024
+- how to control the length of oligos to be in the 200-300 range rather than 2000
+- impact of changing the packet redundancy 
+- impact of chunk size ?
