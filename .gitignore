@@ -174,9 +174,6 @@ Zippy
 data/decoded.txt/*
 debug/debug_output.txt
 configs/data/decoded.txt/*
-libraries/*
-libraries/*/*/*
-libraries/*/*
 data/results/*.csv
 Dorn.zip
 data/Dorn copy.zip
