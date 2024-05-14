@@ -1,7 +1,7 @@
 {
   "decode": {
-    "input": "data/encoded.fasta",
-    "NOREC4DNA_config": "data/encoded.ini",
+    "input": "data/encoded_img.fasta",
+    "NOREC4DNA_config": "data/00005_560x888_94.jxl_Mon_Apr_29_10_42_30_2024.ini",
     "length": 0,
     "metric": {
       "fano": {
@@ -16,7 +16,7 @@
         "no_hit": 9
       }
     },
-    "output": "data/decoded.txt",
+    "output": "data/decoded_img.jxl",
     "queue": {
       "reduce": 0.5,
       "runs": 1,
@@ -29,10 +29,10 @@
     }
   },
   "encode": {
-    "input": "data/D",
-    "keep_intermediary": true,
+    "input": "data/00005_560x888_94.jxl",
+    "keep_intermediary": false,
     "min_length": 0,
-    "output": "data/encoded.fasta",
+    "output": "data/encoded_img.fasta",
     "same_length": true,
     "update_config": true
   },
@@ -50,9 +50,9 @@
     }
   },
   "NOREC4DNA": {
-    "chunk_size": 25,
+    "chunk_size": 10384,
     "package_redundancy": 0.4,
-    "insert_header": true,
+    "insert_header":true,
     "header_crc_length": 8,
     "error_detection": "crc"
   }

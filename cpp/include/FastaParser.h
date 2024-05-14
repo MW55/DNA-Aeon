@@ -9,10 +9,25 @@
 #include <fstream>
 #include "include/debug_log.h"
 
-int write_to_fasta(const std::string &file_name, list<tuple<std::string, vector<unsigned char>>> &list_of_sequences) {
-    /*
-     * Writes the given list of sequences to a fasta file.
-     */
+/**
+ * @brief 
+ * 
+ * you open a file as a output stream and write the sequences to the file
+ * you write that way :
+ * - for each string, you have a vector of unsigned char
+ * - you transform the vector of unsigned char to a "string"
+ * - you write the string part of the tuple to the file (>8416_RU10)
+ * - you write the vector of unsigned char to the file (casted to a string)
+ * 
+ * - once done you flush the file and close it
+ * 
+ * @param file_name 
+ * @param list_of_sequences 
+ * @return int 
+ */
+
+int write_to_fasta(const std::string &file_name, list<tuple<std::string, vector<unsigned char>>> &list_of_sequences) 
+{
     std::ofstream fasta_file;
     fasta_file.open(file_name);
     for (tuple<std::string, vector<unsigned char>> &sequence: list_of_sequences) {

@@ -8,6 +8,18 @@
 
 using namespace std;
 
+/**
+ * @brief Construct a new Inflate:: Inflate object
+ * nBits is fixed to 16
+ * 
+ * we get tempB from readCB() (nb_bytes |)
+ * code is shifted to the left and tempB is added to it
+ * (does it work like this ?)
+ * 
+ * @param nBits 
+ * @param bitin 
+ */
+
 Inflate::Inflate(int nBits, BitInStream &bitin):
     acBase(nBits),
     nBits(nBits),
@@ -15,11 +27,18 @@ Inflate::Inflate(int nBits, BitInStream &bitin):
     readingDone(false),
     code(0)
     {
-    for (int i=0; i<nBits; i++) {
-        int tempB = readCB();
-        code = code << 1 | tempB;
+        for (int i=0; i<nBits; i++) {
+            int tempB = readCB();
+            code = code << 1 | tempB;
+        }
     }
-    }
+
+/**
+ * @brief 
+ * 
+ * @param freqs 
+ * @return int 
+ */
 
 int Inflate::read(FreqTable &freqs) {
     uint64_t total = freqs.getTotal();
@@ -59,6 +78,18 @@ void Inflate::underflow() {
     code = (code & hr) | ((code << 1) & (mask >> 1)) | tempB;
 }
 
+/**
+ * @brief readCB()
+ * this function reads the bit from the BitInStream object
+ * if it's -1 (EOF) 
+ *  - if nBits is 16, set temp to 1, otherwise set to 0
+ *  if nBits == -1, set readingDone to true
+ * 
+ * return temp
+ * @return int you either return the number of bits read or 0 or 1 if EOF (if we are %16) 
+ *
+ */
+
 int Inflate::readCB() {
     int temp = bitin.read();
     if (temp == -1) {
@@ -70,6 +101,25 @@ int Inflate::readCB() {
     }
     return temp;
 }
+
+/**
+ * @brief 
+ * you open a stringstream
+ * the BitInStream is created
+ * create an output stringstream
+ * 
+ * - inflating method ?
+ * - create a std::vector<uc>res(out_str.begin(), out_str.end());
+ *  
+ * 
+ * @param data     is a string of data to be encoded (inarch.GetEntry(ent).GetDataAsString())
+ * @param sync     from ["general"]["sync"] (Number of bytes between sync (crc) steps)
+ * @param freqs     
+ * @param minLen   from ["encode"]["minLen"] (Minimum length of encoded data)
+ * @param filename is the name (inarch.GetEntry(ent))
+ * @param results  a reference to results list
+ * @param res_lock a lock to protect results list
+ */
 
 void do_encode(const string &data, uint8_t sync, FreqTable freqs, uint16_t minLen, const string &filename,
                list<tuple<string, vector<unsigned char>>> &results, std::mutex *res_lock) {

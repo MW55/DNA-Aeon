@@ -17,6 +17,12 @@ BitInStream::BitInStream(istream &inStream, int sync) :
         streamDone(false),
         remBits(0) {}
 
+/**
+ * @brief 
+ * 
+ * @return int 
+ */
+
 int BitInStream::read() {
     if (cByte == -1 || streamDone) {
         return endStream();
@@ -46,6 +52,12 @@ int BitInStream::read() {
     remBits--;
     return (cByte >> remBits) & 1;
 }
+
+/**
+ * @brief 
+ * 
+ * @return int 
+ */
 
 int BitInStream::endStream() {
     if (sync == 0) {

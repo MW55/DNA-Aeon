@@ -19,11 +19,33 @@ using namespace std;
 list<tuple<string, vector<unsigned char>>> results = list<tuple<string, vector<unsigned char>>>();
 std::mutex *res_lock;
 
-void
-encode_zip(nlohmann::json config, const FreqTable &freqs, uint16_t minLen, bool sameLength, string configPath) {
+/**
+ * @brief the function is recursively called to encode the input file
+ * if sameLength is true, the function will encode the input file with the same length
+ * then recall
+ * if update_config is true, the function will update the config file with the new length
+ * with do_encode, the function will update the results
+ * then we clear the results and call encode_zip again
+ * 
+ * 
+ * @param config 
+ * @param freqs       
+ * @param minLen     (when sameLength is true, the minLen is the maxLen of the previous encoding)
+ * @param sameLength (it's a bool from the config file)
+ * @param configPath 
+ */
+
+void encode_zip(nlohmann::json config, const FreqTable &freqs, uint16_t minLen, bool sameLength, string configPath) {
     int maxLen = 0;
     Zippy::ZipArchive inarch(config["encode"]["input"]);
     std::vector<std::string> ents = inarch.GetEntryNames();
+    /*for (auto &ent: ents){
+        std::string data = inarch.GetEntry(ent).GetDataAsString();
+        std::cout << ent << std::endl;
+        std::cout << data << std::endl;
+    }*/
+
+    //static_cast of an unsigned long to an int can be UB if value is greater than 2^31
     absl::synchronization_internal::ThreadPool pool(static_cast<int>(min(static_cast<unsigned long>(config["general"]["threads"]),ents.size())));
     for (auto &ent: ents) {
         string data = inarch.GetEntry(ent).GetDataAsString();
@@ -35,18 +57,26 @@ encode_zip(nlohmann::json config, const FreqTable &freqs, uint16_t minLen, bool 
     //either store as zip or as fasta...
     {
         std::unique_lock<std::mutex> uLock(*res_lock);
+        DEBUG("results size 2 : " << results.size());
         if (sameLength) {
+            DEBUG("SAME LENGTH");
             for (auto &res: results) {
                 int size = get<1>(res).size();
                 if (size > maxLen)
+                {
+                    //DEBUG("Size: " << size); outputs 2054
                     maxLen = size;
+                }
             }
+            DEBUG("Max length: " << maxLen);
         } else if (config["general"]["as_fasta"]) {
+            DEBUG("Writing to fasta");
             write_to_fasta(config["encode"]["output"], results);
         } else {
+            DEBUG("Writing to zip");
             write_to_zip(config["encode"]["output"], true, config["general"]["zip"]["most_common_only"], config["general"]["zip"]["decodable_only"], results);
         }
-        if(config["encode"]["same_length"] && config["encode"]["update_config"]) {
+        if (config["encode"]["same_length"] && config["encode"]["update_config"]) {
             config[nlohmann::json::json_pointer("/decode/length")] = minLen;
             std::ofstream confout(configPath);
             confout << config;
@@ -55,6 +85,7 @@ encode_zip(nlohmann::json config, const FreqTable &freqs, uint16_t minLen, bool 
         }
     }
     if (sameLength) {
+        DEBUG("SAME LENGTH_2");
         results.clear();
         encode_zip(config, freqs, maxLen, false, configPath);
     }
@@ -151,7 +182,7 @@ nlohmann::json parseValidateConfig(string configPath, bool encode) {
  */
 
 int main(int argc, char *argv[]) {
-    res_lock = new std::mutex();
+    res_lock = new std::mutex(); //why dynamic allocation?
     argparse::ArgumentParser program("arithmetic_error_correction", "1.0.0");
     program.add_argument("-e", "--encode").default_value(false).implicit_value(true).help("encode a file");
     program.add_argument("-d", "--decode").default_value(false).implicit_value(true).help("decode a file");
@@ -188,6 +219,7 @@ int main(int argc, char *argv[]) {
     if (encode) {
         DEBUG("Encoding");
         if (static_cast<string>((std::string)config["encode"]["input"]).ends_with(".zip")) {
+            DEBUG("Encoding zip file");
             encode_zip(config, freqs, config["encode"]["min_length"], config["encode"]["same_length"], configPath);
         } else {
             DEBUG("Encoding file (not zip)");
@@ -276,7 +308,6 @@ int main(int argc, char *argv[]) {
                 DEBUG("Writing to zip");
                 std::unique_lock<std::mutex> uLock(*res_lock);
                 write_to_zip(config["decode"]["output"], true, static_cast<bool>(config["general"]["zip"]["most_common_only"]), static_cast<bool>(config["general"]["zip"]["decodable_only"]),results);
-
             }
         } else {
             DEBUG("Decoding file");

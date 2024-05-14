@@ -408,6 +408,7 @@ SeqEntry ECdecoding::decode(int codewordLen,
             res.ac.finish();
             SUCCESS("CRC SUCCESSFUL in iteration: " << itCount << " metric " << res.metric);
             res = checkCandidate(res, config["decode"]["threshold"]["finish"]);
+            DEBUG("Res.seq :" << res.seq);
         } catch (const logic_error &e) {
             INFO("CRC FAILED in iteration: " << itCount);
             endFailed = true;
@@ -435,7 +436,7 @@ SeqEntry ECdecoding::decode(int codewordLen,
  * 
  * @param fanoMetrics   array of fano metrics
  * @param bases         the 4 bases (A, T, C, G)
- * @param itCount       iteration counter
+ * @param itCount       iteration counter (update to 2053 iterations) => so it quits when messageLen is reached
  */
 
 void ECdecoding::mainLoop(array<double, 2> &fanoMetrics, array<char, 4> &bases, int itCount) {
@@ -449,8 +450,8 @@ void ECdecoding::mainLoop(array<double, 2> &fanoMetrics, array<char, 4> &bases, 
             throw out_of_range("Queue is empty.");
         }
     }
-    std::cout << "Iterations: " << itCount << std::endl;
-    std::cout << "mainLoop done" << std::endl;
+    //std::cout << "Iterations: " << itCount << std::endl;
+    //std::cout << "mainLoop done" << std::endl;
 }
 
 /**
@@ -467,12 +468,15 @@ void ECdecoding::mainLoop(array<double, 2> &fanoMetrics, array<char, 4> &bases, 
  */
 
 SeqEntry ECdecoding::checkCandidate(SeqEntry &can, unsigned long threshold) {
+    DEBUG("Checking candidate.");
     candidates.push_back(can);
     if (candidates.size() > threshold) {
+        DEBUG("Threshold reached, checking best candidate.");
         SeqEntry bestCan = *min_element(candidates.begin(), candidates.end());
         //DEBUG("Final candidate: " << bestCan.seq);
         return bestCan;
     } else {
+        DEBUG("Threshold not reached, continuing.");
         endFailed = true;
         return can;
     }
@@ -516,7 +520,8 @@ void do_decode(const string &inp,
         DEBUG("decode done");
         metric_str = to_string(dec.metric);
         data = *dec.ac.bitout.get_data();
-        DEBUG("try block done");
+        //DEBUG("try block done");
+        DEBUG("\033[1;32mtryblock done\033[0m");
     }
     catch (...) {
         //WARN("No candidate found.");

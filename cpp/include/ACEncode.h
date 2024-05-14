@@ -34,8 +34,22 @@ public:
     int readCBEOF(BitInStream &input);
 };
 
+/**
+ * @brief 
+ * Create the class Inflate (16 is ?, BitInStream is the reference to the BitInStream object)
+ * sym = inf.read(freqs)
+ * we are reading the symbol from the freqs table
+ * until we have long enough string
+ * 
+ * 
+ * 
+ * @tparam T : is stringstream reference
+ * @param freqs 
+ * @param bitin the BitInStream ref object (hold sync and data in stringstream)
+ * @param out the stringstream object
+ * @param minLen 
+ */
 
-// you need T to have the put method implemented (using concepts would be better?)
 template<typename T>
 void inflating(FreqTable &freqs, BitInStream &bitin, T &out, int minLen = 0) {
     Inflate inf(16, bitin);

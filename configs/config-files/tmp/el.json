@@ -1,49 +1,49 @@
 {
   "decode": {
-    "input": "data/encoded.fasta",
-    "NOREC4DNA_config": "data/encoded.ini",
-    "length": 0,
+    "input": "data/encoded_el.fasta",
+    "NOREC4DNA_config": "data/el.jpg_Thu_Feb_24_09_58_39_2022.ini",
+    "length": 156,
     "metric": {
       "fano": {
         "error_probability": 0.05,
         "rate": {
-          "high": 7,
-          "low": 1
+          "high": 4,
+          "low": 3
         }
       },
       "penalties": {
-        "crc": 0.2,
-        "no_hit": 9
+        "crc": 0.1,
+        "no_hit": 8
       }
     },
     "output": "data/decoded.txt",
     "queue": {
       "reduce": 0.5,
-      "runs": 1,
+      "runs": 0,
       "size": 200000
     },
     "threshold": {
-      "checkpoint": 4,
+      "checkpoint": 3,
       "finish": 0,
-      "loop": 2
+      "loop": 1
     }
   },
   "encode": {
-    "input": "data/D",
-    "keep_intermediary": true,
-    "min_length": 0,
-    "output": "data/encoded.fasta",
+    "input": "data/el.jpg",
+    "keep_intermediary": false,
+    "min_length": 156,
+    "output": "data/encoded_el.fasta",
     "same_length": true,
     "update_config": true
   },
   "general": {
     "as_fasta": true,
     "codebook": {
-      "motifs": "./configs/codewords/cw_40_60_hp3.json",
-      "words": "./configs/codewords/cw_40_60_hp3.fasta"
+      "motifs": "./configs/codewords/in_vitro_test.json",
+      "words": "./configs/codewords/in_vitro_test.fasta"
     },
-    "sync": 2,
-    "threads": 4,
+    "sync": 3,
+    "threads": 2,
     "zip": {
       "decodable_only": true,
       "most_common_only": true
@@ -52,7 +52,7 @@
   "NOREC4DNA": {
     "chunk_size": 25,
     "package_redundancy": 0.4,
-    "insert_header": true,
+    "insert_header":true,
     "header_crc_length": 8,
     "error_detection": "crc"
   }

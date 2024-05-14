@@ -197,3 +197,5 @@ data/intermediates_results/*.zip
 data/intermediates_results/*
 data/tmp/encoded.fasta
 data/tmp/encoded.ini
+.vscode
+data/experiments/*
