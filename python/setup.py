@@ -19,10 +19,10 @@ def install_norec_packages(current_path):
 def compile_dna_aeon(current_path, debug_mode):
     current_path = "{cpath}/build".format(cpath=current_path)
     print("Current path: ", current_path)
-    if debug_mode == True :
+    if debug_mode :
         run(["cmake", "-DENABLE_DEBUG_MACRO=ON", current_path])
     else :
-        run(["cmake", current_path])
+        run(["cmake", "-B", current_path + "/build", "-S", "{cpath}/".format(cpath=current_path), "-DCMAKE_BUILD_TYPE=Release"])
     run(["make"], cwd=current_path) 
 
 # Main function should offers debug options for cmake
