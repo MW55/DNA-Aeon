@@ -4,9 +4,10 @@ from venv import create
 from os.path import abspath
 
 
-def create_norec_env(current_path):
-    venv_dir = "{cpath}/NOREC4DNA/venv".format(cpath=current_path)
-    create(venv_dir, with_pip=True)
+def create_norec_env(current_path, python_executable="python3.9"):
+    venv_dir = f"{current_path}/NOREC4DNA/venv"
+    run([python_executable, "-m", "venv", venv_dir])
+
 
 def install_norec_packages(current_path):
     run(["venv/bin/pip", "install", "wheel"], cwd="{cpath}/NOREC4DNA".format(cpath=current_path))
