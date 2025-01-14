@@ -27,6 +27,7 @@ you can then start the installation using the *setup.py* script in the root fold
 ```shell
 $ python3.9 setup.py
 ```
+The installation assumes that Python 3.9 is installed as *python3.9*. If that is not the case, you can hardcode the path to your Python 3.9 installation using the *python_executable* parameter of the *setup.py* *create_norec_env* function.
 
 this will create a python virtual environment in the NOREC4DNA folder, install NOREC4DNA and then compile DNA-Aeon. The installation should take less than 5 minutes on a typical desktop pc, but can take longer if an older pip version is used.
 
